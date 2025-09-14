@@ -1,6 +1,6 @@
 {
   "name": "toastify-pro",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A lightweight customizable toast notification library",
   "main": "dist/toastify-pro.umd.js",
   "module": "dist/toastify-pro.esm.js",
