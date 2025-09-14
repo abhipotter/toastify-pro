@@ -6,12 +6,12 @@ export default {
     {
       file: "dist/toastify-pro.umd.js",
       format: "umd",
-      name: "Toastify-Pro"
+      name: "ToastifyPro"
     },
     {
       file: "dist/toastify-pro.umd.min.js",
       format: "umd",
-      name: "Toastify-Pro",
+      name: "ToastifyPro",
       plugins: [terser()]
     },
     {

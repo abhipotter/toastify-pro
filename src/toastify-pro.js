@@ -128,3 +128,5 @@
       this.show(msg, "light", opts);
     }
   }
+
+export default ToastifyPro;
