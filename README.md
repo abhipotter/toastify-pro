@@ -1,9 +1,7 @@
-# 🎉 Toastify Pro
-
 <div align="center">
 
 <img src="https://abhipotter.github.io/toastify-pro/assets/logo/logo.png" alt="Toastify Pro Logo" width="100" height="100"/>
-<p>Toastify Pro</p>
+<h1> 🚀 Quick Start - Install Toastify Pro (JavaScript Toast Notifications) </h1>
 
 **A modern, lightweight, and highly customizable toast notification library**
 
@@ -38,7 +36,7 @@ npm install toastify-pro
 
 #### CDN (Browser)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.0.1/dist/toastify-pro.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.1.0/dist/toastify-pro.umd.min.js"></script>
 ```
 
 ### 🔨 Basic Usage
@@ -64,7 +62,7 @@ toast.light('Light themed message');
 <html>
 <head>
     <title>Toastify Pro Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.0.1/dist/toastify-pro.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.1.0/dist/toastify-pro.umd.min.js"></script>
 </head>
 <body>
     <button onclick="showToast()">Show Toast</button>
