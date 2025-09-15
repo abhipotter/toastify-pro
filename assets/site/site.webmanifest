@@ -1,0 +1,217 @@
+{
+  "name": "Toastify Pro - Best JavaScript Toast Notification Library",
+  "short_name": "Toastify Pro",
+  "description": "Ultimate lightweight JavaScript toast notification library. Perfect SweetAlert alternative, Toastr replacement, and React Toast solution with zero dependencies. 6 themes, 6 positions, framework agnostic.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#6366f1",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "lang": "en",
+  "scope": "/",
+  "categories": [
+    "developer",
+    "productivity",
+    "utilities",
+    "web",
+    "javascript",
+    "library",
+    "notifications",
+    "toast",
+    "ui"
+  ],
+  "keywords": "toast notifications, javascript toast, react toast, toastify, toastr, sweetalert alternative, notification library, javascript notifications, web notifications, toast message, alert notifications, popup notifications, success toast, error toast, warning toast, info toast, react toastify, vue notifications, angular notifications, javascript alert, custom toast, notification popup, toast component, notification component, lightweight toast, responsive notifications, mobile toast, toast library, notification system, user feedback, ui notifications, frontend notifications, web toast, browser notifications, toast plugin",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/favicon.ico",
+      "sizes": "150x150",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-demo.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Toastify Pro Desktop Demo - Interactive Toast Notifications"
+    },
+    {
+      "src": "/screenshots/mobile-demo.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Toastify Pro Mobile Demo - Responsive Toast Library"
+    },
+    {
+      "src": "/screenshots/themes-showcase.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Toastify Pro - 6 Beautiful Toast Themes"
+    },
+    {
+      "src": "/screenshots/comparison-chart.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Library Comparison - Toastify Pro vs SweetAlert vs Toastr"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Live Demo",
+      "short_name": "Demo",
+      "description": "Try Toastify Pro interactive demo",
+      "url": "/#demo",
+      "icons": [
+        {
+          "src": "/icons/demo-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Installation Guide",
+      "short_name": "Install",
+      "description": "How to install and setup Toastify Pro",
+      "url": "/#installation",
+      "icons": [
+        {
+          "src": "/icons/install-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "API Reference",
+      "short_name": "API",
+      "description": "Complete API documentation",
+      "url": "/#api-reference",
+      "icons": [
+        {
+          "src": "/icons/api-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "GitHub Repository",
+      "short_name": "GitHub",
+      "description": "View source code on GitHub",
+      "url": "https://github.com/abhipotter/toastify-pro",
+      "icons": [
+        {
+          "src": "/icons/github-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "NPM Package",
+      "short_name": "NPM",
+      "description": "Install from NPM registry",
+      "url": "https://www.npmjs.com/package/toastify-pro",
+      "icons": [
+        {
+          "src": "/icons/npm-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://abhipotter.github.io/toastify-pro/",
+      "id": "toastify-pro-web"
+    },
+    {
+      "platform": "npm",
+      "url": "https://www.npmjs.com/package/toastify-pro",
+      "id": "toastify-pro-npm"
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "scope_extensions": [
+    {
+      "origin": "https://github.com"
+    },
+    {
+      "origin": "https://www.npmjs.com"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+toastify",
+      "url": "/?action=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/handle-config",
+      "accept": {
+        "application/json": [".json"],
+        "text/javascript": [".js"],
+        "application/javascript": [".js"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "display_override": [
+    "window-controls-overlay",
+    "minimal-ui",
+    "standalone",
+    "browser"
+  ],
+  "id": "toastify-pro-pwa",
+  "dir": "ltr",
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+}
