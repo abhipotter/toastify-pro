@@ -2,7 +2,8 @@
 
 <div align="center">
 
-![Toastify Pro Logo](https://via.placeholder.com/200x100/4F46E5/FFFFFF?text=Toastify+Pro)
+<img src="https://abhipotter.github.io/toastify-pro/assets/logo/logo.png" alt="Toastify Pro Logo" width="100" height="100"/>
+<p>Toastify Pro</p>
 
 **A modern, lightweight, and highly customizable toast notification library**
 
