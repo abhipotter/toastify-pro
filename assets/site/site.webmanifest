@@ -53,7 +53,7 @@
       "purpose": "any"
     },
     {
-      "src": "/assets/icons/favicon.ico",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "150x150",
       "type": "image/png",
       "purpose": "any"
