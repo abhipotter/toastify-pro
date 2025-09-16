@@ -36,7 +36,7 @@ npm install toastify-pro
 
 #### CDN (Browser)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.1.0/dist/toastify-pro.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-pro/dist/toastify-pro.umd.min.js"></script>
 ```
 
 ### 🔨 Basic Usage
@@ -62,7 +62,7 @@ toast.light('Light themed message');
 <html>
 <head>
     <title>Toastify Pro Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/toastify-pro@1.1.0/dist/toastify-pro.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-pro/dist/toastify-pro.umd.min.js"></script>
 </head>
 <body>
     <button onclick="showToast()">Show Toast</button>
