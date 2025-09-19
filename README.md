@@ -19,11 +19,17 @@
 - 🚀 **Lightweight** - Minimal bundle size with zero dependencies
 - 🎨 **6 Built-in Themes** - Success, Error, Info, Warning, Dark, and Light themes
 - 📱 **Flexible Positioning** - 6 different position options
-- ⚡ **Smooth Animations** - CSS transitions with fade and slide effects
+- ⚡ **Apple-Style Animations** - Smooth AirDrop-inspired entrance and exit effects
 - 🔧 **Framework Agnostic** - Works with React, Vue, Angular, or vanilla JS
 - 🎯 **Auto-dismiss** - Configurable timeout with manual close option
+- 📝 **Description Support** - Optional secondary text for detailed messages
 - 🌈 **Easy Customization** - Simple API with sensible defaults
 - ♿ **Accessible** - Clean HTML structure with proper styling
+- 🎨 **Custom SVG Icons** - Beautiful vector icons for each toast type
+- 🚗 **Car Swipe Exit Animations** - Position-aware exit animations (5 types)
+- 📱 **POP UP Entrance** - iOS-inspired entrance animation with rotation
+- ✨ **Glassmorphism Design** - Modern backdrop blur effects and transparency
+- 📊 **Progress Bar Animation** - Visual countdown with shimmer effects
 
 ## 🚀 Quick Start
 
@@ -54,6 +60,11 @@ toast.warning('Please check your input');
 toast.info('New update available');
 toast.dark('Dark themed message');
 toast.light('Light themed message');
+
+// Show toasts with descriptions
+toast.success('Success!', 'Your changes have been saved successfully.');
+toast.error('Error occurred!', 'Please check your network connection and try again.');
+toast.info('New feature!', 'Check out our latest updates in the dashboard.');
 ```
 
 #### With CDN
@@ -118,51 +129,86 @@ Main method to display a toast notification.
 toast.show('Custom message', 'success', {
     timeout: 5000,      // Override default timeout
     allowClose: false,  // Hide close button for this toast
-    maxLength: 50       // Override message length limit
+    maxLength: 50,      // Override message length limit
+    description: 'Additional details about the message' // Optional description
 });
 ```
 
-#### `toast.success(message, options)`
-Display a success toast with green background.
+#### Enhanced Toast Methods with Description Support
+All toast methods now support description as a second parameter or in options:
+
+#### `toast.success(message, options|description)`
+Display a success toast with green background and checkmark icon.
 ```javascript
 toast.success('Data saved successfully!');
 toast.success('Upload complete!', { timeout: 2000 });
+toast.success('Success!', 'Your changes have been saved.'); // With description
 ```
 
-#### `toast.error(message, options)`
-Display an error toast with red background.
+#### `toast.error(message, options|description)`
+Display an error toast with red background and error icon.
 ```javascript
 toast.error('Failed to save data!');
 toast.error('Network error occurred!', { allowClose: false });
+toast.error('Error!', 'Please check your connection and try again.'); // With description
 ```
 
-#### `toast.warning(message, options)`
-Display a warning toast with orange background.
+#### `toast.warning(message, options|description)`
+Display a warning toast with orange background and warning icon.
 ```javascript
 toast.warning('Please verify your input');
 toast.warning('Session expires in 5 minutes', { timeout: 10000 });
+toast.warning('Warning!', 'This action cannot be undone.'); // With description
 ```
 
-#### `toast.info(message, options)`
-Display an info toast with blue background.
+#### `toast.info(message, options|description)`
+Display an info toast with blue background and info icon.
 ```javascript
 toast.info('New feature available!');
 toast.info('Check your email for verification', { timeout: 0 }); // No auto-dismiss
+toast.info('Info', 'Here are some helpful tips for you.'); // With description
 ```
 
-#### `toast.dark(message, options)`
-Display a dark themed toast.
+#### `toast.dark(message, options|description)`
+Display a dark themed toast with star icon.
 ```javascript
 toast.dark('Dark mode enabled');
 toast.dark('Processing in background...', { allowClose: false });
+toast.dark('Dark Mode', 'Switched to elegant dark theme.'); // With description
 ```
 
-#### `toast.light(message, options)`
-Display a light themed toast with dark text.
+#### `toast.light(message, options|description)`
+Display a light themed toast with dark text and calendar icon.
 ```javascript
 toast.light('Light theme activated');
 toast.light('Settings updated', { timeout: 2000 });
+toast.light('Light Mode', 'Switched to clean light theme.'); // With description
 ```
+
+### 🆕 Enhanced Features
+
+#### Custom SVG Icons
+Each toast type includes beautiful vector icons that scale perfectly:
+- **Success**: ✓ Checkmark circle icon
+- **Error**: ✗ X circle icon  
+- **Warning**: ⚠ Triangle warning icon
+- **Info**: ℹ Info circle icon
+- **Dark**: ★ Star icon
+- **Light**: ☀ Calendar icon
+
+#### Position-Aware Car Swipe Animations
+Toasts automatically exit with position-aware animations:
+- `carSwipeBottom` - For bottom positioned toasts (swipes down)
+- `carSwipeTop` - For top positioned toasts (swipes up)
+- `carSwipeLeft` - For left positioned toasts (swipes left)
+- `carSwipeRight` - For right positioned toasts (swipes right)
+- `carSwipeCenter` - For center positioned toasts (swipes down)
+
+#### POP UP Entrance Animation
+All toasts use the `airdropPop` entrance animation with:
+- 4-stage rotation and scaling effects
+- Professional iOS-inspired timing
+- Smooth cubic-bezier transitions
 
 ## 🎨 Customization
 
@@ -183,6 +229,16 @@ toast.error('Critical error!', { timeout: 0 });
 
 // Quick notification
 toast.success('Saved!', { timeout: 1000 });
+
+// Toast with description - object format
+toast.info('Update Available', {
+    description: 'Version 2.0 is now available with new features and improvements.',
+    timeout: 8000,
+    allowClose: true
+});
+
+// Toast with description - simple format
+toast.success('Welcome!', 'Thanks for joining our platform. Explore the features!');
 
 // Long message with close button
 toast.info('This is a very long message that might be truncated', {
@@ -244,11 +300,25 @@ function App() {
     const handleError = () => {
         toast?.error('Something went wrong in React!');
     };
+    
+    const handleWithDescription = () => {
+        toast?.info('New Feature!', 'Check out our latest React integration updates.');
+    };
+
+    const handleIconDemo = () => {
+        // Showcase different icons with descriptions
+        toast?.success('✓ Success Icon', 'Beautiful checkmark with green theme');
+        setTimeout(() => toast?.error('✗ Error Icon', 'Clear error indication with red theme'), 500);
+        setTimeout(() => toast?.warning('⚠ Warning Icon', 'Alert triangle with orange theme'), 1000);
+        setTimeout(() => toast?.info('ℹ Info Icon', 'Information circle with blue theme'), 1500);
+    };
 
     return (
         <div>
             <button onClick={handleSuccess}>Show Success</button>
             <button onClick={handleError}>Show Error</button>
+            <button onClick={handleWithDescription}>Show with Description</button>
+            <button onClick={handleIconDemo}>Demo All Icons</button>
         </div>
     );
 }
@@ -356,23 +426,72 @@ document.getElementById('submitForm').addEventListener('click', async function()
         const response = await fetch('/api/submit', { method: 'POST' });
         
         if (response.ok) {
-            toast.success('Form submitted successfully!');
+            toast.success('Form submitted successfully!', 'Your data has been processed and saved.');
         } else {
-            toast.error('Failed to submit form');
+            toast.error('Failed to submit form', 'Please check your inputs and try again.');
         }
     } catch (error) {
-        toast.error('Network error occurred');
+        toast.error('Network error occurred', 'Check your connection and retry.');
     }
 });
 
-// Multiple toast types
+// File upload with progress
+function handleFileUpload() {
+    toast.info('Uploading...', 'Please wait while we process your file.');
+    
+    // Simulate upload completion
+    setTimeout(() => {
+        toast.success('Upload complete!', 'Your file has been uploaded successfully.');
+    }, 3000);
+}
+
+// Multiple toast types with descriptions
 function showAllTypes() {
-    toast.success('Success message');
-    setTimeout(() => toast.error('Error message'), 500);
-    setTimeout(() => toast.warning('Warning message'), 1000);
-    setTimeout(() => toast.info('Info message'), 1500);
-    setTimeout(() => toast.dark('Dark message'), 2000);
-    setTimeout(() => toast.light('Light message'), 2500);
+    toast.success('Success!', 'Operation completed successfully');
+    setTimeout(() => toast.error('Error!', 'Something went wrong'), 500);
+    setTimeout(() => toast.warning('Warning!', 'Please review this action'), 1000);
+    setTimeout(() => toast.info('Info', 'Here is some helpful information'), 1500);
+    setTimeout(() => toast.dark('Dark Mode', 'Elegant dark notification'), 2000);
+    setTimeout(() => toast.light('Light Mode', 'Clean light notification'), 2500);
+}
+
+// Showcase new enhanced features
+function demoEnhancedFeatures() {
+    // SVG Icons demo
+    toast.success('✓ Beautiful Icons', 'Each type has its own vector icon that scales perfectly');
+    
+    // Car swipe animation (automatic based on position)
+    setTimeout(() => {
+        toast.info('🚗 Car Swipe Exit', 'Watch the position-aware exit animation');
+    }, 1000);
+    
+    // Apple AirDrop entrance (automatic)
+    setTimeout(() => {
+        toast.warning('📱 AirDrop Style', 'iOS-inspired entrance with rotation effects');
+    }, 2000);
+    
+    // Glassmorphism design
+    setTimeout(() => {
+        toast.dark('✨ Glassmorphism', 'Modern backdrop blur with translucent design');
+    }, 3000);
+}
+
+// Advanced usage with all new features
+function advancedExample() {
+    // Progress indication with description
+    toast.info('Processing...', {
+        description: 'Please wait while we upload your file to the server',
+        timeout: 0, // No auto-dismiss
+        allowClose: true
+    });
+    
+    // Simulate progress completion
+    setTimeout(() => {
+        toast.success('Upload Complete!', {
+            description: 'Your file has been uploaded successfully with all metadata',
+            timeout: 5000
+        });
+    }, 3000);
 }
 ```
 
@@ -393,17 +512,27 @@ function showAllTypes() {
 | `timeout` | number | `3000` | Auto-dismiss time (0 = no auto-dismiss) |
 | `allowClose` | boolean | `true` | Show close button |
 | `maxLength` | number | `100` | Maximum message length |
+| `description` | string | `undefined` | Optional secondary text for detailed information |
 
 ## 🎨 Available Themes
 
-| Theme | Background | Text Color | Use Case |
-|-------|------------|------------|----------|
-| `success` | Green | White | Success messages |
-| `error` | Red | White | Error messages |
-| `warning` | Orange | White | Warning messages |
-| `info` | Blue | White | Information messages |
-| `dark` | Dark Gray | White | General purpose |
-| `light` | Light Gray | Black | Light theme compatibility |
+| Theme | Background | Text Color | Icon | Use Case |
+|-------|------------|------------|------|----------|
+| `success` | Green | White | ✓ Checkmark | Success messages |
+| `error` | Red | White | ✗ X Circle | Error messages |
+| `warning` | Orange | White | ⚠ Triangle | Warning messages |
+| `info` | Blue | White | ℹ Info Circle | Information messages |
+| `dark` | Dark Gray | White | ★ Star | General purpose |
+| `light` | Light Gray | Black | ☀ Calendar | Light theme compatibility |
+
+### 🆕 Enhanced Visual Features
+
+- **Custom SVG Icons**: Each theme includes beautiful vector icons that are crisp at any resolution
+- **Glassmorphism Design**: Modern backdrop-filter blur effects with translucent backgrounds  
+- **Car Swipe Animations**: Position-aware exit animations that swipe toasts in natural directions
+- **POP UP Entrance**: Professional iOS-inspired entrance with 4-stage rotation and scaling
+- **Progress Bar**: Animated progress bar with shimmer effects showing remaining time
+- **Responsive Design**: Mobile-first approach that adapts to all screen sizes
 
 ## 📄 License
 

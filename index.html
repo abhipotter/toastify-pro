@@ -23,7 +23,7 @@
     />
     <meta
       name="keywords"
-      content="toast notifications, javascript toast, react toast, toastify, toastr, sweetalert alternative, notification library, javascript notifications, web notifications, toast message, alert notifications, popup notifications, success toast, error toast, warning toast, info toast, react toastify, vue notifications, angular notifications, javascript alert, custom toast, notification popup, toast component, notification component, lightweight toast, responsive notifications, mobile toast, toast library, notification system, user feedback, ui notifications, frontend notifications, web toast, browser notifications, toast plugin"
+      content="toast notifications, javascript toast, react toast, toastify, toastr, sweetalert alternative, notification library, javascript notifications, web notifications, toast message, alert notifications, POP UP notifications, success toast, error toast, warning toast, info toast, react toastify, vue notifications, angular notifications, javascript alert, custom toast, notification POP UP, toast component, notification component, lightweight toast, responsive notifications, mobile toast, toast library, notification system, user feedback, ui notifications, frontend notifications, web toast, browser notifications, toast plugin"
     />
     <meta name="author" content="Abhishek Potter" />
     <meta name="robots" content="index, follow" />
@@ -1803,6 +1803,10 @@
           line-height: 1.4;
         }
 
+        .example-card .code-block{
+          max-width: 65% !important;
+        }
+
         .comparison-table th,
         .comparison-table td {
           padding: 10px 6px;
@@ -1886,12 +1890,13 @@
 
         /* Better table scrolling on very small screens */
         .table-container {
-          margin: 20px -16px;
-          border-radius: 0;
+          /* margin: 20px -16px; */
+          border-radius: 20px;
         }
 
         .comparison-table {
           min-width: 500px;
+          margin-left: 15px;
         }
       }
 
@@ -2209,6 +2214,54 @@
               <i class="fas fa-rocket"></i> Show All Types
             </button>
           </div>
+
+          <h3>🆕 New Features Demo</h3>
+          <div class="button-grid">
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+                color: white;
+              "
+              onclick="showCustomToast('description')"
+              aria-label="Show toast with description"
+            >
+              <i class="fas fa-comment"></i> With Description
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+                color: white;
+              "
+              onclick="showCustomToast('icons')"
+              aria-label="Show toast with custom icons"
+            >
+              <i class="fas fa-icons"></i> Custom Icons
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+                color: white;
+              "
+              onclick="showCustomToast('airdrop')"
+              aria-label="Show AirDrop style animation"
+            >
+              <i class="fas fa-paper-plane"></i> AirDrop Style
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+                color: white;
+              "
+              onclick="showCustomToast('glassmorphism')"
+              aria-label="Show glassmorphism effects"
+            >
+              <i class="fas fa-sparkles"></i> Glassmorphism
+            </button>
+          </div>
         </section>
 
         <section class="info-section" aria-labelledby="installation-heading">
@@ -2362,6 +2415,42 @@ toast.success('Hello World!');</pre
                 than most notification libraries.
               </p>
             </div>
+            <div class="feature-card">
+              <h4>🎨 Custom SVG Icons</h4>
+              <p>
+                Beautiful vector icons for each toast type. Crisp at any resolution with perfect scaling. Icons adapt to theme colors automatically.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>📝 Description Support</h4>
+              <p>
+                Add optional secondary text with descriptions. Perfect for detailed user feedback with title + description format.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>🚗 Car Swipe Exit Animations</h4>
+              <p>
+                Position-aware exit animations that swipe toasts off-screen in the most natural direction. 5 different swipe patterns.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>📱 POP UP Entrance</h4>
+              <p>
+                Stunning Apple-style entrance animation with rotation and scaling effects. Professional iOS-inspired user experience.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>✨ Glassmorphism Design</h4>
+              <p>
+                Modern glassmorphism effects with backdrop-filter blur and translucent backgrounds. Premium visual design that stands out.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>📊 Progress Bar Animation</h4>
+              <p>
+                Animated progress bar with shimmer effects showing remaining time. Visual countdown with smooth linear animation.
+              </p>
+            </div>
           </div>
         </section>
       </main>
@@ -2497,6 +2586,46 @@ toast.success('Hello World!');</pre
                 <td>Good</td>
                 <td>Good</td>
               </tr>
+              <tr>
+                <td>🆕 Custom SVG Icons</td>
+                <td class="highlight">✅ Built-in Vector Icons</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+              </tr>
+              <tr>
+                <td>🆕 Description Support</td>
+                <td class="highlight">✅ Title + Description</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+              </tr>
+              <tr>
+                <td>🆕 Exit Animations</td>
+                <td class="highlight">✅ Car Swipe (5 Types)</td>
+                <td>❌</td>
+                <td>❌ Basic Fade</td>
+                <td>❌ Basic Slide</td>
+                <td>❌ Basic Fade</td>
+              </tr>
+              <tr>
+                <td>🆕 Entrance Animation</td>
+                <td class="highlight">✅ POP UP Style</td>
+                <td>❌ Basic Modal</td>
+                <td>❌ Basic Fade</td>
+                <td>❌ Basic Slide</td>
+                <td>❌ Basic Slide</td>
+              </tr>
+              <tr>
+                <td>🆕 Glassmorphism Design</td>
+                <td class="highlight">✅ Backdrop Blur Effects</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -2565,6 +2694,37 @@ const copyToClipboard = (text) => {
               >
             </div>
           </div>
+
+          <div class="example-card">
+            <h4>📝 Toast with Description</h4>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+              <pre>
+// New! Description support
+toast.success('Upload Complete', 'Your file has been uploaded successfully to the server');
+
+// Or using options object
+toast.error('Connection Failed', {
+  description: 'Please check your internet connection and try again',
+  timeout: 5000
+});</pre
+              >
+            </div>
+          </div>
+
+          <div class="example-card">
+            <h4>🎨 Custom Icons & Themes</h4>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+              <pre>
+// Beautiful SVG icons automatically included
+toast.success('Payment received!'); // ✓ icon
+toast.error('Payment failed!');     // ✗ icon
+toast.warning('Low balance!');      // ⚠ icon
+toast.info('Update available!');    // ℹ icon</pre
+              >
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2606,11 +2766,48 @@ const copyToClipboard = (text) => {
           <div class="method-signature">toast.light(message, options?)</div>
           <p><strong>Parameters:</strong></p>
           <ul>
-            <li><code>message</code> - The text to display in the toast</li>
+            <li><code>message</code> - The main text to display in the toast</li>
+            <li><code>description</code> - Optional secondary text (string or options.description)</li>
             <li>
               <code>options</code> - Optional configuration to override defaults
+              <ul>
+                <li><code>options.description</code> - Secondary descriptive text</li>
+                <li><code>options.timeout</code> - Override default timeout</li>
+                <li><code>options.allowClose</code> - Override close button setting</li>
+                <li><code>options.maxLength</code> - Override max message length</li>
+              </ul>
             </li>
           </ul>
+        </div>
+
+        <div class="api-method">
+          <h4>🆕 New Features</h4>
+          <div class="method-signature">// Description Support</div>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Method 1: Pass description as second parameter
+toast.success('Title', 'Description text');
+
+// Method 2: Pass in options object
+toast.error('Error occurred', {
+  description: 'Please try again later',
+  timeout: 5000
+});</pre>
+            </div>
+          
+          <div class="method-signature">// Position-Aware Car Swipe Animations</div>
+          <p>Toasts automatically exit with position-aware animations:</p>
+          <ul>
+            <li><code>carSwipeBottom</code> - For bottom positioned toasts</li>
+            <li><code>carSwipeTop</code> - For top positioned toasts</li>
+            <li><code>carSwipeLeft</code> - For left positioned toasts</li>
+            <li><code>carSwipeRight</code> - For right positioned toasts</li>
+            <li><code>carSwipeCenter</code> - For center positioned toasts</li>
+          </ul>
+
+          <div class="method-signature">// POP UP Entrance Animation</div>
+          <p>All toasts use the <code>airdropPop</code> entrance animation with 4-stage rotation and scaling effects.</p>
         </div>
 
         <div class="api-method">
@@ -2686,6 +2883,24 @@ const copyToClipboard = (text) => {
             manages their positioning and animations.
           </div>
         </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <i class="fas fa-chevron-down"></i> What are the new features in the latest version?
+          </div>
+          <div class="faq-answer">
+            The latest version includes: Custom SVG icons for each toast type, Description support for title + secondary text, Position-aware car swipe exit animations, POP UP-style entrance animations, and modern glassmorphism design with backdrop blur effects.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <i class="fas fa-chevron-down"></i> How do I use the description feature?
+          </div>
+          <div class="faq-answer">
+            You can add descriptions in two ways: Pass it as the second parameter <code>toast.success('Title', 'Description')</code> or use the options object <code>toast.success('Title', {description: 'Description text'})</code>.
+          </div>
+        </div>
       </section>
 
       <section class="documentation" id="documentation">
@@ -2754,6 +2969,62 @@ toast.info('This is a very long message...', {
     allowClose: true,
     timeout: 8000
 });</pre
+            >
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>🆕 Enhanced Features</h3>
+          
+          <h4>Description Support</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Method 1: Pass description as second parameter
+toast.success('Upload Complete', 'Your file has been uploaded successfully');
+
+// Method 2: Use options object
+toast.error('Connection Failed', {
+    description: 'Please check your internet connection and try again',
+    timeout: 5000
+});
+
+// Works with all toast types
+toast.warning('Low Storage', 'Only 10% storage remaining on your device');</pre
+            >
+          </div>
+
+          <h4>Custom SVG Icons</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Beautiful SVG icons are automatically included for each type:
+toast.success('Payment received!');  // ✓ Check circle icon
+toast.error('Payment failed!');      // ✗ X circle icon  
+toast.warning('Low balance!');       // ⚠ Triangle warning icon
+toast.info('Update available!');     // ℹ Info circle icon
+toast.dark('Night mode enabled');    // ★ Star icon
+toast.light('Day mode enabled');     // ☀ Calendar icon
+
+// Icons are vector-based and scale perfectly at any resolution</pre
+            >
+          </div>
+
+          <h4>Advanced Animations</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Position-aware car swipe exit animations:
+// - Bottom positions: carSwipeBottom (swipes down off screen)
+// - Top positions: carSwipeTop (swipes up off screen)  
+// - Left positions: carSwipeLeft (swipes left off screen)
+// - Right positions: carSwipeRight (swipes right off screen)
+// - Center positions: carSwipeCenter (swipes down off screen)
+
+// POP UP entrance animation (automatic):
+// - 4-stage rotation and scaling effects
+// - Professional iOS-inspired user experience
+// - Smooth cubic-bezier timing functions</pre
             >
           </div>
         </div>
@@ -3049,6 +3320,26 @@ npm test</pre
               "This is a very long message that demonstrates how the toast handles lengthy content and truncates it according to the maxLength setting.",
               { maxLength: 200 }
             );
+            break;
+          case "description":
+            toast.success("Upload Complete", "Your file has been uploaded successfully to the server");
+            break;
+          case "icons":
+            setTimeout(() => toast.success("Success with beautiful icon!"), 0);
+            setTimeout(() => toast.error("Error with custom icon!"), 600);
+            setTimeout(() => toast.warning("Warning with vector icon!"), 1200);
+            setTimeout(() => toast.info("Info with scalable icon!"), 1800);
+            break;
+          case "airdrop":
+            toast.info("Watch the POP UP-style entrance animation!", {
+              description: "Smooth rotation and scaling effects just like iOS"
+            });
+            break;
+          case "glassmorphism":
+            toast.dark("Modern Glassmorphism Design", {
+              description: "Backdrop blur effects with translucent backgrounds",
+              timeout: 4000
+            });
             break;
         }
       }
