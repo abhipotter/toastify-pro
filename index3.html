@@ -1,30 +1,110 @@
-﻿/**
- * ToastifyPro - Modern Toast Notification Library
- * A beautiful, customizable toast notification library with glassmorphism design,
- * Apple AirDrop-style animations, and car swipe exit effects.
- * 
- * Features:
- * - Glassmorphism design with backdrop-filter effects
- * - Apple AirDrop-style entrance animations
- * - Position-aware car swipe exit animations  
- * - Description support for enhanced messaging
- * - Six theme variants (success, error, info, warning, dark, light)
- * - Progress bar with shimmer effects
- * - Responsive design for mobile devices
- * - Framework agnostic (works with React, Vue, Angular, etc.)
- * - Confirmation dialogs with customizable buttons and callbacks
- * - Center position support for enhanced focus
- * - Independent positioning for confirmations
- * 
- * @version 1.3.0
- * @author ToastifyPro Team
- * @license MIT
- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToastifyPro - Modern Toast Notifications</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .demo-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 600px;
+    }
+    
+    .demo-container h1 {
+      color: white;
+      font-size: 2.5rem;
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      background: linear-gradient(45deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .demo-container p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      margin: 0 0 30px 0;
+      line-height: 1.6;
+    }
+    
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .demo-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    .demo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-success { background: linear-gradient(135deg, rgba(34, 197, 94, 0.8), rgba(21, 128, 61, 0.8)); }
+    .btn-error { background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(185, 28, 28, 0.8)); }
+    .btn-info { background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(29, 78, 216, 0.8)); }
+    .btn-warning { background: linear-gradient(135deg, rgba(245, 158, 11, 0.8), rgba(217, 119, 6, 0.8)); }
+    .btn-dark { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)); }
+    .btn-light { background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.8)); color: #1e293b; }
+    .btn-confirm { background: linear-gradient(135deg, rgba(168, 85, 247, 0.8), rgba(139, 69, 219, 0.8)); }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1>🎉 ToastifyPro</h1>
+    <p>Experience the next generation of toast notifications with stunning glassmorphism design, smooth animations, and modern aesthetics.</p>
+    
+    <div class="btn-grid">
+      <button class="demo-btn btn-success" onclick="toaster.success('Success!', 'Your action was completed perfectly and all changes have been saved.')">Success</button>
+      <button class="demo-btn btn-error" onclick="toaster.error('Error!', 'Something went wrong with your request. Please try again later.')">Error</button>
+      <button class="demo-btn btn-info" onclick="toaster.info('Info', 'Here is some helpful information that you might find useful.')">Info</button>
+      <button class="demo-btn btn-warning" onclick="toaster.warning('Warning!', 'Please review this action carefully before proceeding.')">Warning</button>
+      <button class="demo-btn btn-dark" onclick="toaster.dark('Dark Mode', 'Elegant dark notification with sophisticated styling.')">Dark</button>
+      <button class="demo-btn btn-light" onclick="toaster.light('Light Mode', 'Clean and bright notification design for better visibility.')">Light</button>
+      <button class="demo-btn btn-confirm" onclick="showConfirmationDemo()">Confirm</button>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+
 class ToastifyPro {
   /**
    * Creates a new ToastifyPro instance
    * @param {Object} options - Configuration options
-   * @param {string} options.position - Toast position (top-left, top-right, bottom-left, bottom-right, top-center, bottom-center, center)
+   * @param {string} options.position - Toast position (top-left, top-right, bottom-left, bottom-right, top-center, bottom-center)
    * @param {number} options.timeout - Auto-dismiss timeout in milliseconds (0 to disable)
    * @param {boolean} options.allowClose - Whether to show close button
    * @param {number} options.maxLength - Maximum message length
@@ -38,7 +118,7 @@ class ToastifyPro {
 
     // Merge with default options
     this.defaultOptions = {
-      position: options.position || "bottom-center", // top-left, top-right, bottom-left, bottom-right, top-center, bottom-center, center
+      position: options.position || "bottom-center", // top-left, top-right, bottom-left, bottom-right, top-center, bottom-center
       timeout: options.timeout || 3000,
       allowClose: options.allowClose !== false, // default true
       maxLength: options.maxLength || 100,
@@ -996,7 +1076,7 @@ class ToastifyPro {
       allowClose: false, // No close button, must choose
       confirmText: options.confirmText || 'Confirm',
       cancelText: options.cancelText || 'Cancel',
-      confirmColor: options.confirmColor || 'dark',
+      color: options.color || 'dark',
       position: options.position || 'center', // Default to center for confirmations
       ...options
     };
@@ -1025,7 +1105,7 @@ class ToastifyPro {
     try {
       // Create confirmation toast element
       const toast = document.createElement("div");
-      toast.className = `toastify-pro confirmation ${confirmOptions.confirmColor}`;
+      toast.className = `toastify-pro confirmation ${confirmOptions.color}`;
 
       // Create close button for confirmation
       const closeBtn = document.createElement("span");
@@ -1081,7 +1161,7 @@ class ToastifyPro {
 
       // Confirm button
       const confirmBtn = document.createElement("button");
-      confirmBtn.className = `toast-btn toast-btn-confirm toast-btn-${confirmOptions.confirmColor}`;
+      confirmBtn.className = `toast-btn toast-btn-confirm toast-btn-${confirmOptions.color}`;
       confirmBtn.textContent = confirmOptions.confirmText;
       confirmBtn.onclick = () => {
         if (onResult) onResult(true);
@@ -1112,30 +1192,96 @@ class ToastifyPro {
   }
 }
 
-/**
- * Export for different environments
- * Supports CommonJS (Node.js), AMD, and browser globals
- */
+// export default ToastifyPro;
 
-// CommonJS export (Node.js/npm)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ToastifyPro;
+const toaster = new ToastifyPro({ position: "bottom-center", timeout: 5000 });
+
+// Demo function for confirmation toast
+let demoCount = 0;
+function showConfirmationDemo() {
+  const demos = [
+    // Center position with dark theme (new default)
+    () => toaster.conf('Delete this item?', {
+      description: 'This action cannot be undone and will permanently remove all associated data.',
+      confirmText: 'Delete',
+      cancelText: 'Keep'
+      // Using default center position and dark color
+    }, (confirmed) => {
+      if (confirmed) {
+        toaster.success('Deleted!', 'The item has been successfully removed.');
+      } else {
+        toaster.info('Cancelled', 'No changes were made.');
+      }
+    }),
+    
+    // Center position with success theme
+    () => toaster.conf('Save changes?', {
+      confirmText: 'Save',
+      cancelText: 'Discard',
+      color: 'success'
+      // Using default center position
+    }, (confirmed) => {
+      if (confirmed) {
+        toaster.success('Saved!', 'Your changes have been saved successfully.');
+      } else {
+        toaster.warning('Discarded', 'Your changes were not saved.');
+      }
+    }),
+    
+    // Top-right position with warning theme
+    () => toaster.conf('Proceed with caution?', {
+      description: 'This action requires administrator privileges and may affect system settings.',
+      confirmText: 'Proceed',
+      cancelText: 'Cancel',
+      color: 'warning',
+      position: 'top-right'
+    }, (confirmed) => {
+      if (confirmed) {
+        toaster.info('Processing...', 'Your request is being processed.');
+      } else {
+        toaster.dark('Cancelled', 'Operation was cancelled for safety.');
+      }
+    }),
+    
+    // Bottom-left position with light theme
+    () => toaster.conf('Switch to light mode?', {
+      description: 'This will change the interface to a brighter theme for better visibility.',
+      confirmText: 'Switch',
+      cancelText: 'Keep Dark',
+      color: 'light',
+      position: 'bottom-left'
+    }, (confirmed) => {
+      if (confirmed) {
+        toaster.light('Switched!', 'Interface changed to light mode.');
+      } else {
+        toaster.dark('Keeping dark mode', 'Interface remains in dark theme.');
+      }
+    }),
+    
+    // Center position with error theme
+    () => toaster.conf('Reset all settings?', {
+      description: 'This will restore all application settings to their default values.',
+      confirmText: 'Reset',
+      cancelText: 'Cancel',
+      color: 'error'
+      // Using default center position
+    }, (confirmed) => {
+      if (confirmed) {
+        toaster.success('Reset complete!', 'All settings have been restored to defaults.');
+      } else {
+        toaster.info('Reset cancelled', 'Your settings remain unchanged.');
+      }
+    })
+  ];
+  
+  // Cycle through different demos
+  demos[demoCount % demos.length]();
+  demoCount++;
 }
 
-// ES6 module export
-if (typeof exports !== 'undefined') {
-  exports.ToastifyPro = ToastifyPro;
-  exports.default = ToastifyPro;
-}
-
-// AMD export (RequireJS)
-if (typeof define === 'function' && define.amd) {
-  define(function() {
-    return ToastifyPro;
-  });
-}
-
-// Browser global
-if (typeof window !== 'undefined') {
-  window.ToastifyPro = ToastifyPro;
-}
+// Welcome message
+setTimeout(() => {
+  // toaster.info('🚀 Welcome to ToastifyPro!', 'Click the Confirm button to test the new confirmation feature.');
+  showConfirmationDemo();
+}, 1000);
+</script>

@@ -18,7 +18,7 @@
 
 - 🚀 **Lightweight** - Minimal bundle size with zero dependencies
 - 🎨 **6 Built-in Themes** - Success, Error, Info, Warning, Dark, and Light themes
-- 📱 **Flexible Positioning** - 6 different position options
+- 📱 **Flexible Positioning** - 7 different position options including center
 - ⚡ **Apple-Style Animations** - Smooth AirDrop-inspired entrance and exit effects
 - 🔧 **Framework Agnostic** - Works with React, Vue, Angular, or vanilla JS
 - 🎯 **Auto-dismiss** - Configurable timeout with manual close option
@@ -30,6 +30,8 @@
 - 📱 **POP UP Entrance** - iOS-inspired entrance animation with rotation
 - ✨ **Glassmorphism Design** - Modern backdrop blur effects and transparency
 - 📊 **Progress Bar Animation** - Visual countdown with shimmer effects
+- 🔔 **Confirmation Dialogs** - Interactive confirm/cancel dialogs with callbacks
+- 🎯 **Center Position** - Perfect center positioning for important confirmations
 
 ## 🚀 Quick Start
 
@@ -65,6 +67,31 @@ toast.light('Light themed message');
 toast.success('Success!', 'Your changes have been saved successfully.');
 toast.error('Error occurred!', 'Please check your network connection and try again.');
 toast.info('New feature!', 'Check out our latest updates in the dashboard.');
+
+// 🆕 NEW: Confirmation dialogs
+toast.conf('Delete this item?', (confirmed) => {
+    if (confirmed) {
+        toast.success('Item deleted successfully!');
+    } else {
+        toast.info('Delete cancelled');
+    }
+});
+
+// Confirmation with description
+toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
+    console.log('User confirmed:', confirmed);
+});
+
+// Advanced confirmation options
+toast.conf('Save changes?', {
+    description: 'Your changes will be permanently saved.',
+    confirmText: 'Save',
+    cancelText: 'Discard',
+    confirmColor: 'success',
+    position: 'center', // Default for confirmations
+    onConfirm: () => console.log('Confirmed!'),
+    onCancel: () => console.log('Cancelled!')
+});
 ```
 
 #### With CDN
@@ -77,6 +104,7 @@ toast.info('New feature!', 'Check out our latest updates in the dashboard.');
 </head>
 <body>
     <button onclick="showToast()">Show Toast</button>
+    <button onclick="showConfirmation()">Show Confirmation</button>
     
     <script>
         const toast = new ToastifyPro();
@@ -93,6 +121,29 @@ toast.info('New feature!', 'Check out our latest updates in the dashboard.');
             toast.show('Custom message', 'info', {
                 timeout: 5000,
                 allowClose: true
+            });
+        }
+        
+        // 🆕 NEW: Confirmation dialogs
+        function showConfirmation() {
+            toast.conf('Delete this item?', 'This action cannot be undone.', (confirmed) => {
+                if (confirmed) {
+                    toast.success('Item deleted!');
+                } else {
+                    toast.info('Delete cancelled');
+                }
+            });
+        }
+        
+        function showAdvancedConfirmation() {
+            toast.conf('Save document?', {
+                description: 'All your changes will be saved permanently.',
+                confirmText: 'Save Now',
+                cancelText: 'Cancel',
+                confirmColor: 'success',
+                position: 'center'
+            }, (confirmed) => {
+                console.log('User decision:', confirmed);
             });
         }
     </script>
@@ -120,6 +171,7 @@ const toast = new ToastifyPro({
 - `bottom-left` - Bottom left corner
 - `bottom-right` - Bottom right corner
 - `bottom-center` - Bottom center (default)
+- `center` - Perfect center of screen (ideal for confirmations)
 
 ### Methods
 
@@ -183,6 +235,74 @@ Display a light themed toast with dark text and calendar icon.
 toast.light('Light theme activated');
 toast.light('Settings updated', { timeout: 2000 });
 toast.light('Light Mode', 'Switched to clean light theme.'); // With description
+```
+
+#### 🆕 `toast.conf(message, descriptionOrCallback, callback)`
+Display an interactive confirmation dialog with confirm/cancel buttons.
+
+**Features:**
+- 🎯 **Center positioning** (default) for maximum attention
+- ✖️ **Close button** in top-right corner (acts as cancel)
+- 🎨 **Customizable** button text, colors, and themes
+- 📱 **Responsive** design for mobile devices
+- ⚡ **No auto-dismiss** - requires user interaction
+
+```javascript
+// Simple confirmation with callback
+toast.conf('Delete this item?', (confirmed) => {
+    if (confirmed) {
+        console.log('User confirmed');
+    } else {
+        console.log('User cancelled');
+    }
+});
+
+// Confirmation with description
+toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
+    handleUserChoice(confirmed);
+});
+
+// Advanced confirmation with full options
+toast.conf('Save changes?', {
+    description: 'Your changes will be permanently saved to the server.',
+    confirmText: 'Save Now',        // Custom confirm button text
+    cancelText: 'Discard',          // Custom cancel button text
+    confirmColor: 'success',        // Theme for confirmation (success, error, info, warning, dark, light)
+    position: 'center',             // Position (defaults to 'center' for confirmations)
+    onConfirm: () => saveData(),    // Alternative callback approach
+    onCancel: () => discardChanges()
+});
+
+// Real-world example: Delete confirmation
+function deleteItem(itemId) {
+    toast.conf('Delete item?', 
+        'This will permanently remove the item from your account.', 
+        (confirmed) => {
+            if (confirmed) {
+                // Perform deletion
+                deleteFromServer(itemId);
+                toast.success('Item deleted successfully!');
+            } else {
+                toast.info('Delete cancelled');
+            }
+        }
+    );
+}
+
+// Form save confirmation
+function handleFormSubmit() {
+    toast.conf('Save changes?', {
+        description: 'Your form data will be submitted and cannot be edited later.',
+        confirmText: 'Submit',
+        cancelText: 'Keep Editing',
+        confirmColor: 'success',
+        position: 'center'
+    }, (confirmed) => {
+        if (confirmed) {
+            submitForm();
+        }
+    });
+}
 ```
 
 ### 🆕 Enhanced Features
@@ -305,6 +425,34 @@ function App() {
         toast?.info('New Feature!', 'Check out our latest React integration updates.');
     };
 
+    // 🆕 NEW: Confirmation dialog examples
+    const handleDelete = () => {
+        toast?.conf('Delete item?', 'This action cannot be undone.', (confirmed) => {
+            if (confirmed) {
+                // Perform deletion logic
+                console.log('Deleting item...');
+                toast?.success('Item deleted successfully!');
+            } else {
+                toast?.info('Delete cancelled');
+            }
+        });
+    };
+    
+    const handleLogout = () => {
+        toast?.conf('Sign out?', {
+            description: 'You will need to sign in again to access your account.',
+            confirmText: 'Sign Out',
+            cancelText: 'Stay Signed In',
+            confirmColor: 'warning',
+            position: 'center'
+        }, (confirmed) => {
+            if (confirmed) {
+                // Logout logic
+                window.location.href = '/login';
+            }
+        });
+    };
+
     const handleIconDemo = () => {
         // Showcase different icons with descriptions
         toast?.success('✓ Success Icon', 'Beautiful checkmark with green theme');
@@ -319,6 +467,8 @@ function App() {
             <button onClick={handleError}>Show Error</button>
             <button onClick={handleWithDescription}>Show with Description</button>
             <button onClick={handleIconDemo}>Demo All Icons</button>
+            <button onClick={handleDelete}>Delete with Confirmation</button>
+            <button onClick={handleLogout}>Logout Confirmation</button>
         </div>
     );
 }
@@ -333,6 +483,8 @@ export default App;
         <button @click="showSuccess">Show Success</button>
         <button @click="showError">Show Error</button>
         <button @click="showCustom">Show Custom</button>
+        <button @click="showConfirmation">Show Confirmation</button>
+        <button @click="showDeleteConfirmation">Delete Item</button>
     </div>
 </template>
 
@@ -364,6 +516,38 @@ export default {
                 timeout: 6000,
                 allowClose: true
             });
+        },
+        // 🆕 NEW: Confirmation methods
+        showConfirmation() {
+            this.toast.conf('Save changes?', (confirmed) => {
+                if (confirmed) {
+                    this.saveData();
+                } else {
+                    this.toast.info('Changes not saved');
+                }
+            });
+        },
+        showDeleteConfirmation() {
+            this.toast.conf('Delete this item?', {
+                description: 'This action cannot be undone and will remove all associated data.',
+                confirmText: 'Delete',
+                cancelText: 'Keep',
+                confirmColor: 'error',
+                position: 'center'
+            }, (confirmed) => {
+                if (confirmed) {
+                    this.deleteItem();
+                    this.toast.success('Item deleted successfully!');
+                }
+            });
+        },
+        saveData() {
+            // Save logic here
+            this.toast.success('Data saved successfully!');
+        },
+        deleteItem() {
+            // Delete logic here
+            console.log('Item deleted');
         }
     }
 };
@@ -381,6 +565,8 @@ import ToastifyPro from 'toastify-pro';
         <button (click)="showSuccess()">Show Success</button>
         <button (click)="showError()">Show Error</button>
         <button (click)="showInfo()">Show Info</button>
+        <button (click)="showConfirmation()">Show Confirmation</button>
+        <button (click)="showLogoutConfirmation()">Logout</button>
     `
 })
 export class ToastExampleComponent implements OnInit {
@@ -407,6 +593,41 @@ export class ToastExampleComponent implements OnInit {
             timeout: 5000
         });
     }
+    
+    // 🆕 NEW: Confirmation methods
+    showConfirmation() {
+        this.toast.conf('Save document?', 'All changes will be saved permanently.', (confirmed: boolean) => {
+            if (confirmed) {
+                this.saveDocument();
+            } else {
+                this.toast.info('Save cancelled');
+            }
+        });
+    }
+    
+    showLogoutConfirmation() {
+        this.toast.conf('Sign out?', {
+            description: 'You will be logged out of your account.',
+            confirmText: 'Sign Out',
+            cancelText: 'Cancel',
+            confirmColor: 'warning',
+            position: 'center'
+        }, (confirmed: boolean) => {
+            if (confirmed) {
+                this.logout();
+            }
+        });
+    }
+    
+    private saveDocument() {
+        // Save logic
+        this.toast.success('Document saved successfully!');
+    }
+    
+    private logout() {
+        // Logout logic
+        this.toast.success('Logged out successfully!');
+    }
 }
 ```
 
@@ -419,30 +640,71 @@ const toast = new ToastifyPro({
     allowClose: true
 });
 
-// Form submission example
+// Form submission example with confirmation
 document.getElementById('submitForm').addEventListener('click', async function() {
-    try {
-        // Simulate API call
-        const response = await fetch('/api/submit', { method: 'POST' });
-        
-        if (response.ok) {
-            toast.success('Form submitted successfully!', 'Your data has been processed and saved.');
-        } else {
-            toast.error('Failed to submit form', 'Please check your inputs and try again.');
+    toast.conf('Submit form?', 'Your data will be sent to the server.', async (confirmed) => {
+        if (confirmed) {
+            try {
+                // Simulate API call
+                const response = await fetch('/api/submit', { method: 'POST' });
+                
+                if (response.ok) {
+                    toast.success('Form submitted successfully!', 'Your data has been processed and saved.');
+                } else {
+                    toast.error('Failed to submit form', 'Please check your inputs and try again.');
+                }
+            } catch (error) {
+                toast.error('Network error occurred', 'Check your connection and retry.');
+            }
         }
-    } catch (error) {
-        toast.error('Network error occurred', 'Check your connection and retry.');
-    }
+    });
 });
 
-// File upload with progress
+// Delete confirmation example
+function deleteItem(itemId) {
+    toast.conf('Delete this item?', {
+        description: 'This action cannot be undone and will permanently remove all associated data.',
+        confirmText: 'Delete',
+        cancelText: 'Keep',
+        confirmColor: 'error',
+        position: 'center'
+    }, (confirmed) => {
+        if (confirmed) {
+            // Perform deletion
+            console.log('Deleting item:', itemId);
+            toast.success('Item deleted!', 'The item has been permanently removed.');
+        } else {
+            toast.info('Delete cancelled', 'Your item is safe.');
+        }
+    });
+}
+
+// File upload with confirmation and progress
 function handleFileUpload() {
-    toast.info('Uploading...', 'Please wait while we process your file.');
-    
-    // Simulate upload completion
-    setTimeout(() => {
-        toast.success('Upload complete!', 'Your file has been uploaded successfully.');
-    }, 3000);
+    toast.conf('Upload file?', 'The file will be uploaded to your account.', (confirmed) => {
+        if (confirmed) {
+            toast.info('Uploading...', 'Please wait while we process your file.');
+            
+            // Simulate upload completion
+            setTimeout(() => {
+                toast.success('Upload complete!', 'Your file has been uploaded successfully.');
+            }, 3000);
+        }
+    });
+}
+
+// Logout confirmation
+function logout() {
+    toast.conf('Sign out?', {
+        description: 'You will need to sign in again to access your account.',
+        confirmText: 'Sign Out',
+        cancelText: 'Stay Signed In',
+        confirmColor: 'warning'
+    }, (confirmed) => {
+        if (confirmed) {
+            window.location.href = '/login';
+        }
+    });
 }
 
 // Multiple toast types with descriptions
@@ -455,7 +717,7 @@ function showAllTypes() {
     setTimeout(() => toast.light('Light Mode', 'Clean light notification'), 2500);
 }
 
-// Showcase new enhanced features
+// Showcase new enhanced features including confirmations
 function demoEnhancedFeatures() {
     // SVG Icons demo
     toast.success('✓ Beautiful Icons', 'Each type has its own vector icon that scales perfectly');
@@ -474,24 +736,61 @@ function demoEnhancedFeatures() {
     setTimeout(() => {
         toast.dark('✨ Glassmorphism', 'Modern backdrop blur with translucent design');
     }, 3000);
+    
+    // 🆕 Confirmation dialog demo
+    setTimeout(() => {
+        toast.conf('Try confirmation?', 'Experience the new interactive dialog feature.', (confirmed) => {
+            if (confirmed) {
+                toast.success('🎉 Confirmation works!', 'You can now create interactive dialogs easily.');
+            } else {
+                toast.info('No problem!', 'Confirmation dialogs are optional.');
+            }
+        });
+    }, 4000);
+}
+
+// Advanced confirmation examples
+function advancedConfirmationExamples() {
+    // Settings reset confirmation
+    toast.conf('Reset all settings?', {
+        description: 'This will restore all settings to their default values.',
+        confirmText: 'Reset',
+        cancelText: 'Cancel',
+        confirmColor: 'error',
+        position: 'center'
+    }, (confirmed) => {
+        if (confirmed) {
+            // Reset settings logic
+            toast.success('Settings reset!', 'All settings have been restored to defaults.');
+        }
+    });
 }
 
 // Advanced usage with all new features
 function advancedExample() {
-    // Progress indication with description
-    toast.info('Processing...', {
-        description: 'Please wait while we upload your file to the server',
-        timeout: 0, // No auto-dismiss
-        allowClose: true
+    // Progress indication with confirmation first
+    toast.conf('Start processing?', {
+        description: 'This will upload your file to the server and may take a few minutes.',
+        confirmText: 'Start',
+        cancelText: 'Later',
+        confirmColor: 'info'
+    }, (confirmed) => {
+        if (confirmed) {
+            toast.info('Processing...', {
+                description: 'Please wait while we upload your file to the server',
+                timeout: 0, // No auto-dismiss
+                allowClose: true
+            });
+            
+            // Simulate progress completion
+            setTimeout(() => {
+                toast.success('Upload Complete!', {
+                    description: 'Your file has been uploaded successfully with all metadata',
+                    timeout: 5000
+                });
+            }, 3000);
+        }
     });
-    
-    // Simulate progress completion
-    setTimeout(() => {
-        toast.success('Upload Complete!', {
-            description: 'Your file has been uploaded successfully with all metadata',
-            timeout: 5000
-        });
-    }, 3000);
 }
 ```
 

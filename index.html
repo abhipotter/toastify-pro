@@ -194,7 +194,7 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
 
     <!-- External Resources -->
-    <script src="https://cdn.jsdelivr.net/npm/toastify-pro@latest/dist/toastify-pro.umd.min.js"></script>
+    <script src="dist/toastify-pro.umd.min.js"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       rel="stylesheet"
@@ -2086,6 +2086,7 @@
                 <option value="top-center">Top Center</option>
                 <option value="bottom-left">Bottom Left</option>
                 <option value="bottom-right">Bottom Right</option>
+                <option value="center">Center (Perfect for Confirmations)</option>
               </select>
             </div>
             <div class="config-row">
@@ -2215,7 +2216,7 @@
             </button>
           </div>
 
-          <h3>🆕 New Features Demo</h3>
+          <h3>🆕 New Features & CONF (Confirmation)</h3>
           <div class="button-grid">
             <button
               class="demo-btn"
@@ -2248,6 +2249,65 @@
               onclick="showCustomToast('airdrop')"
               aria-label="Show AirDrop style animation"
             >
+              <i class="fas fa-magic"></i> AirDrop Style
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+                color: white;
+              "
+              onclick="showConfirmationDialog('simple')"
+              aria-label="Show simple confirmation dialog"
+            >
+              <i class="fas fa-question-circle"></i> Simple CONF
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                color: white;
+              "
+              onclick="showConfirmationDialog('delete')"
+              aria-label="Show delete confirmation dialog"
+            >
+              <i class="fas fa-trash"></i> Delete CONF
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+              "
+              onclick="showConfirmationDialog('save')"
+              aria-label="Show save confirmation dialog"
+            >
+              <i class="fas fa-save"></i> Save CONF
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+                color: white;
+              "
+              onclick="showConfirmationDialog('center')"
+              aria-label="Show center positioned confirmation"
+            >
+              <i class="fas fa-crosshairs"></i> Center Position
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+                color: white;
+              "
+              onclick="showConfirmationDialog('advanced')"
+              aria-label="Show advanced confirmation dialog"
+            >
+              <i class="fas fa-cogs"></i> Advance Options
+            </button>
+          </div>
+            <div>
               <i class="fas fa-paper-plane"></i> AirDrop Style
             </button>
             <button
@@ -2312,7 +2372,17 @@ import ToastifyPro from 'toastify-pro';
 
 // Best React Toast Alternative
 const toast = new ToastifyPro();
-toast.success('Hello World!');</pre
+toast.success('Hello World!');
+
+// 🆕 NEW: Confirmation dialogs
+toast.conf('Save changes?', {
+  description: 'Your data will be saved permanently.',
+  confirmText: 'Save',
+  cancelText: 'Cancel',
+  position: 'center'
+}, (confirmed) => {
+  console.log('User confirmed:', confirmed);
+});</pre
               >
             </div>
           </div>
@@ -2329,7 +2399,16 @@ toast.success('Hello World!');</pre
               <pre>
 // SweetAlert Alternative - No jQuery Required
 const toast = new ToastifyPro();
-toast.success('Hello World!');</pre
+toast.success('Hello World!');
+
+// 🆕 NEW: Confirmation dialogs
+toast.conf('Delete item?', (confirmed) => {
+  if (confirmed) {
+    toast.success('Deleted!');
+  } else {
+    toast.info('Cancelled');
+  }
+});</pre
               >
             </div>
           </div>
@@ -2346,7 +2425,14 @@ import ToastifyPro from 'toastify-pro';
 
 // Toastr Replacement - Modern & Lightweight
 const toast = new ToastifyPro();
-toast.success('Hello World!');</pre
+toast.success('Hello World!');
+
+// 🆕 NEW: Confirmation dialogs
+toast.conf('Save changes?').then(confirmed => {
+  if (confirmed) {
+    toast.success('Saved successfully!');
+  }
+});</pre
               >
             </div>
           </div>
@@ -2449,6 +2535,18 @@ toast.success('Hello World!');</pre
               <h4>📊 Progress Bar Animation</h4>
               <p>
                 Animated progress bar with shimmer effects showing remaining time. Visual countdown with smooth linear animation.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>🔔 Interactive Confirmation Dialogs</h4>
+              <p>
+                NEW! Built-in confirmation dialogs with customizable buttons, callbacks, and themes. Perfect for delete confirmations, save dialogs, and user decisions.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>🎯 Perfect Center Positioning</h4>
+              <p>
+                NEW! Center position option places toasts in the exact center of the screen. Ideal for important confirmations and critical notifications.
               </p>
             </div>
           </div>
@@ -2949,7 +3047,52 @@ const toast = new ToastifyPro({
             <li><strong>bottom-left</strong> - Bottom left corner</li>
             <li><strong>bottom-right</strong> - Bottom right corner</li>
             <li><strong>bottom-center</strong> - Bottom center (default)</li>
+            <li><strong>center</strong> - Perfect center (ideal for confirmations) 🆕</li>
           </ul>
+        </div>
+
+        <div class="doc-section">
+          <h3>🆕 Confirmation Dialogs</h3>
+          <p>Interactive confirmation dialogs for user decisions:</p>
+          
+          <h4>Simple Confirmation</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Promise-based (recommended)
+toast.conf('Delete this item?').then(confirmed => {
+  if (confirmed) {
+    console.log('User confirmed');
+  } else {
+    console.log('User cancelled');
+  }
+});
+
+// Callback-based
+toast.conf('Save changes?', (confirmed) => {
+  console.log('User confirmed:', confirmed);
+});</pre
+            >
+          </div>
+
+          <h4>Advanced Confirmations</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// With custom options
+toast.conf('Are you sure?', {
+  description: 'This action cannot be undone.',
+  confirmText: 'Yes, Delete',
+  cancelText: 'Cancel',
+  position: 'center',  // Default for confirmations
+  timeout: 0           // No auto-dismiss
+}, (confirmed) => {
+  if (confirmed) {
+    toast.success('Item deleted successfully');
+  }
+});</pre
+            >
+          </div>
         </div>
 
         <div class="doc-section">
@@ -3339,6 +3482,84 @@ npm test</pre
             toast.dark("Modern Glassmorphism Design", {
               description: "Backdrop blur effects with translucent backgrounds",
               timeout: 4000
+            });
+            break;
+        }
+      }
+
+      // 🆕 NEW: Confirmation dialog examples
+      function showConfirmationDialog(type) {
+        updateToastInstance();
+
+        switch (type) {
+          case "simple":
+            toast.conf("Are you sure?", (confirmed) => {
+              if (confirmed) {
+                toast.success("You clicked Confirm!");
+              } else {
+                toast.info("You clicked Cancel");
+              }
+            });
+            break;
+            
+          case "delete":
+            toast.conf("Delete this item?", "This action cannot be undone and will permanently remove all associated data.", (confirmed) => {
+              if (confirmed) {
+                toast.success("Item deleted successfully!", "The item has been permanently removed from your account.");
+              } else {
+                toast.info("Delete cancelled", "Your item is safe and secure.");
+              }
+            });
+            break;
+            
+          case "save":
+            toast.conf("Save changes?", {
+              description: "Your changes will be permanently saved to the server.",
+              confirmText: "Save Now",
+              cancelText: "Keep Editing",
+              confirmColor: "success",
+              position: "center"
+            }, (confirmed) => {
+              if (confirmed) {
+                toast.success("Changes saved!", "All your modifications have been successfully saved.");
+              } else {
+                toast.warning("Continue editing", "Your changes are still unsaved.");
+              }
+            });
+            break;
+            
+          case "center":
+            toast.conf("Experience center positioning!", {
+              description: "This confirmation dialog appears in the perfect center of your screen for maximum attention.",
+              confirmText: "Amazing!",
+              cancelText: "Close",
+              confirmColor: "info",
+              position: "center"
+            }, (confirmed) => {
+              if (confirmed) {
+                toast.success("🎯 Perfect center!", "Center positioning is ideal for important confirmations.");
+              } else {
+                toast.dark("Thanks for trying!", "Center position provides better user focus.");
+              }
+            });
+            break;
+            
+          case "advanced":
+            toast.conf("Enable advanced features?", {
+              description: "This will activate all premium features including analytics, priority support, and advanced customization options.",
+              confirmText: "Enable Now",
+              cancelText: "Maybe Later",
+              confirmColor: "warning",
+              position: "center",
+              onConfirm: () => {
+                toast.success("🚀 Advanced features enabled!", "You now have access to all premium functionality.");
+                setTimeout(() => {
+                  toast.info("Welcome to Pro!", "Check out the new features in your dashboard.");
+                }, 1500);
+              },
+              onCancel: () => {
+                toast.light("No problem!", "You can enable advanced features anytime from settings.");
+              }
             });
             break;
         }
