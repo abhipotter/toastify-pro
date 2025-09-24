@@ -18,20 +18,18 @@
 
 - 🚀 **Lightweight** - Minimal bundle size with zero dependencies
 - 🎨 **6 Built-in Themes** - Success, Error, Info, Warning, Dark, and Light themes
-- 📱 **Flexible Positioning** - 7 different position options including center
-- ⚡ **Apple-Style Animations** - Smooth AirDrop-inspired entrance and exit effects
+- 🎯 **Interactive Confirmation Dialogs** - Perfect replacement for SweetAlert with dark/light themes only
+- 📱 **7 Flexible Positions** - Including new center position ideal for confirmations
+- ⚡ **Apple-Style Animations** - Smooth AirDrop-inspired entrance and car-swipe exit effects
 - 🔧 **Framework Agnostic** - Works with React, Vue, Angular, or vanilla JS
 - 🎯 **Auto-dismiss** - Configurable timeout with manual close option
 - 📝 **Description Support** - Optional secondary text for detailed messages
 - 🌈 **Easy Customization** - Simple API with sensible defaults
-- ♿ **Accessible** - Clean HTML structure with proper styling
+- ♿ **Accessible** - Clean HTML structure with proper ARIA support
 - 🎨 **Custom SVG Icons** - Beautiful vector icons for each toast type
-- 🚗 **Car Swipe Exit Animations** - Position-aware exit animations (5 types)
-- 📱 **POP UP Entrance** - iOS-inspired entrance animation with rotation
-- ✨ **Glassmorphism Design** - Modern backdrop blur effects and transparency
-- 📊 **Progress Bar Animation** - Visual countdown with shimmer effects
-- 🔔 **Confirmation Dialogs** - Interactive confirm/cancel dialogs with callbacks
-- 🎯 **Center Position** - Perfect center positioning for important confirmations
+- ✨ **Modern Design** - Glassmorphism effects with backdrop blur
+- � **Perfect Callback Handling** - No double execution, conflict-free patterns
+- ❌ **Close Button** - Interactive close buttons for confirmation dialogs
 
 ## 🚀 Quick Start
 
@@ -87,7 +85,7 @@ toast.conf('Save changes?', {
     description: 'Your changes will be permanently saved.',
     confirmText: 'Save',
     cancelText: 'Discard',
-    confirmColor: 'success',
+    theme: 'light', // 'dark' (default) or 'light'
     position: 'center', // Default for confirmations
     onConfirm: () => console.log('Confirmed!'),
     onCancel: () => console.log('Cancelled!')
@@ -140,7 +138,7 @@ toast.conf('Save changes?', {
                 description: 'All your changes will be saved permanently.',
                 confirmText: 'Save Now',
                 cancelText: 'Cancel',
-                confirmColor: 'success',
+                theme: 'light',
                 position: 'center'
             }, (confirmed) => {
                 console.log('User decision:', confirmed);
@@ -243,9 +241,13 @@ Display an interactive confirmation dialog with confirm/cancel buttons.
 **Features:**
 - 🎯 **Center positioning** (default) for maximum attention
 - ✖️ **Close button** in top-right corner (acts as cancel)
-- 🎨 **Customizable** button text, colors, and themes
+- 🎨 **Simple theming** - Dark (default) or Light themes only
 - 📱 **Responsive** design for mobile devices
 - ⚡ **No auto-dismiss** - requires user interaction
+
+**Theme Options:**
+- `theme: 'dark'` (default) - Dark theme with elegant styling
+- `theme: 'light'` or `theme: 'white'` - Clean light theme with dark text
 
 ```javascript
 // Simple confirmation with callback
@@ -267,7 +269,7 @@ toast.conf('Save changes?', {
     description: 'Your changes will be permanently saved to the server.',
     confirmText: 'Save Now',        // Custom confirm button text
     cancelText: 'Discard',          // Custom cancel button text
-    confirmColor: 'success',        // Theme for confirmation (success, error, info, warning, dark, light)
+    theme: 'light',                 // Theme: 'dark' (default) or 'light'
     position: 'center',             // Position (defaults to 'center' for confirmations)
     onConfirm: () => saveData(),    // Alternative callback approach
     onCancel: () => discardChanges()
@@ -295,7 +297,7 @@ function handleFormSubmit() {
         description: 'Your form data will be submitted and cannot be edited later.',
         confirmText: 'Submit',
         cancelText: 'Keep Editing',
-        confirmColor: 'success',
+        theme: 'dark', // Default theme, can be 'light'
         position: 'center'
     }, (confirmed) => {
         if (confirmed) {
@@ -443,7 +445,7 @@ function App() {
             description: 'You will need to sign in again to access your account.',
             confirmText: 'Sign Out',
             cancelText: 'Stay Signed In',
-            confirmColor: 'warning',
+            theme: 'dark',
             position: 'center'
         }, (confirmed) => {
             if (confirmed) {
@@ -532,7 +534,7 @@ export default {
                 description: 'This action cannot be undone and will remove all associated data.',
                 confirmText: 'Delete',
                 cancelText: 'Keep',
-                confirmColor: 'error',
+                theme: 'dark',
                 position: 'center'
             }, (confirmed) => {
                 if (confirmed) {
@@ -610,7 +612,7 @@ export class ToastExampleComponent implements OnInit {
             description: 'You will be logged out of your account.',
             confirmText: 'Sign Out',
             cancelText: 'Cancel',
-            confirmColor: 'warning',
+            theme: 'light',
             position: 'center'
         }, (confirmed: boolean) => {
             if (confirmed) {
@@ -666,7 +668,7 @@ function deleteItem(itemId) {
         description: 'This action cannot be undone and will permanently remove all associated data.',
         confirmText: 'Delete',
         cancelText: 'Keep',
-        confirmColor: 'error',
+        theme: 'dark',
         position: 'center'
     }, (confirmed) => {
         if (confirmed) {
@@ -699,7 +701,7 @@ function logout() {
         description: 'You will need to sign in again to access your account.',
         confirmText: 'Sign Out',
         cancelText: 'Stay Signed In',
-        confirmColor: 'warning'
+        theme: 'light'
     }, (confirmed) => {
         if (confirmed) {
             window.location.href = '/login';
@@ -756,7 +758,7 @@ function advancedConfirmationExamples() {
         description: 'This will restore all settings to their default values.',
         confirmText: 'Reset',
         cancelText: 'Cancel',
-        confirmColor: 'error',
+        theme: 'dark',
         position: 'center'
     }, (confirmed) => {
         if (confirmed) {
@@ -773,7 +775,7 @@ function advancedExample() {
         description: 'This will upload your file to the server and may take a few minutes.',
         confirmText: 'Start',
         cancelText: 'Later',
-        confirmColor: 'info'
+        theme: 'light'
     }, (confirmed) => {
         if (confirmed) {
             toast.info('Processing...', {

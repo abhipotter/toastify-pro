@@ -2240,7 +2240,7 @@
             >
               <i class="fas fa-icons"></i> Custom Icons
             </button>
-            <button
+            <!-- <button
               class="demo-btn"
               style="
                 background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
@@ -2250,7 +2250,7 @@
               aria-label="Show AirDrop style animation"
             >
               <i class="fas fa-magic"></i> AirDrop Style
-            </button>
+            </button> -->
             <button
               class="demo-btn"
               style="
@@ -2293,9 +2293,9 @@
               onclick="showConfirmationDialog('center')"
               aria-label="Show center positioned confirmation"
             >
-              <i class="fas fa-crosshairs"></i> Center Position
+              <i class="fas fa-crosshairs"></i> Positions
             </button>
-            <button
+            <!-- <button
               class="demo-btn"
               style="
                 background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
@@ -2321,7 +2321,7 @@
             >
               <i class="fas fa-sparkles"></i> Glassmorphism
             </button>
-          </div>
+          </div> -->
         </section>
 
         <section class="info-section" aria-labelledby="installation-heading">
@@ -2580,10 +2580,6 @@ toast.conf('Save changes?').then(confirmed => {
             <span class="metric-value">60fps</span>
             <span class="metric-label">Animation Performance</span>
           </div>
-          <!-- <div class="metric-card">
-            <span class="metric-value">0</span>
-            <span class="metric-label">Memory Leaks</span>
-          </div> -->
           <div class="metric-card">
             <span class="metric-value">99%</span>
             <span class="metric-label">Browser Support</span>
@@ -3517,7 +3513,7 @@ npm test</pre
               description: "Your changes will be permanently saved to the server.",
               confirmText: "Save Now",
               cancelText: "Keep Editing",
-              confirmColor: "success",
+              theme: "dark",
               position: "center"
             }, (confirmed) => {
               if (confirmed) {
@@ -3529,18 +3525,15 @@ npm test</pre
             break;
             
           case "center":
-            toast.conf("Experience center positioning!", {
-              description: "This confirmation dialog appears in the perfect center of your screen for maximum attention.",
+            toast.conf("Experience the positioning!", {
+              // description: "This confirmation dialog appears in the perfect center of your screen for maximum attention.",
               confirmText: "Amazing!",
               cancelText: "Close",
-              confirmColor: "info",
-              position: "center"
-            }, (confirmed) => {
-              if (confirmed) {
-                toast.success("🎯 Perfect center!", "Center positioning is ideal for important confirmations.");
-              } else {
-                toast.dark("Thanks for trying!", "Center position provides better user focus.");
-              }
+              position: getPosition(),
+              theme: getTheme(),
+              onConfirm: () => {
+                toast.success("🎯 Perfect!", "All Positioning is ideal for important confirmations.");
+              },
             });
             break;
             
@@ -3549,7 +3542,7 @@ npm test</pre
               description: "This will activate all premium features including analytics, priority support, and advanced customization options.",
               confirmText: "Enable Now",
               cancelText: "Maybe Later",
-              confirmColor: "warning",
+              theme: "dark",
               position: "center",
               onConfirm: () => {
                 toast.success("🚀 Advanced features enabled!", "You now have access to all premium functionality.");
@@ -3563,6 +3556,15 @@ npm test</pre
             });
             break;
         }
+      }
+      
+      function getPosition() {
+        const positions = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"];
+        return positions[Math.floor(Math.random() * positions.length)];
+      }
+      function getTheme() {
+        const themes = ["light", "dark"];
+        return themes[Math.floor(Math.random() * themes.length)];
       }
 
       // Show all toast types in sequence

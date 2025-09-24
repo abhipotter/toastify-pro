@@ -614,6 +614,8 @@ class ToastifyPro {
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       position: relative;
       overflow: hidden;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+      border-color: rgba(148, 163, 184, 0.5);
     }
 
     .toast-btn-confirm::before {
@@ -631,48 +633,10 @@ class ToastifyPro {
       left: 100%;
     }
 
-    .toast-btn-success {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
-      border-color: rgba(34, 197, 94, 0.5);
-    }
-
-    .toast-btn-success:hover {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 1), rgba(21, 128, 61, 1));
-      border-color: rgba(34, 197, 94, 0.7);
-      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-    }
-
-    .toast-btn-error {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(185, 28, 28, 0.9));
-      border-color: rgba(239, 68, 68, 0.5);
-    }
-
-    .toast-btn-error:hover {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 1), rgba(185, 28, 28, 1));
-      border-color: rgba(239, 68, 68, 0.7);
-      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-    }
-
-    .toast-btn-info {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(29, 78, 216, 0.9));
-      border-color: rgba(59, 130, 246, 0.5);
-    }
-
-    .toast-btn-info:hover {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 1), rgba(29, 78, 216, 1));
-      border-color: rgba(59, 130, 246, 0.7);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-    }
-
-    .toast-btn-warning {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
-      border-color: rgba(245, 158, 11, 0.5);
-    }
-
-    .toast-btn-warning:hover {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 1), rgba(217, 119, 6, 1));
-      border-color: rgba(245, 158, 11, 0.7);
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    .toast-btn-confirm:hover {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 1));
+      border-color: rgba(148, 163, 184, 0.7);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.4);
     }
 
     .toastify-pro.light .toast-btn-cancel {
@@ -690,30 +654,14 @@ class ToastifyPro {
     /* Enhanced light theme confirm buttons */
     .toastify-pro.light .toast-btn-confirm {
       border-color: rgba(15, 23, 42, 0.3);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+      color: #1e293b;
     }
 
-    .toastify-pro.light .toast-btn-success {
-      color: white;
-    }
-
-    .toastify-pro.light .toast-btn-error {
-      color: white;
-    }
-
-    .toastify-pro.light .toast-btn-info {
-      color: white;
-    }
-
-    .toastify-pro.light .toast-btn-warning {
-      color: white;
-    }
-
-    .toastify-pro.dark .toast-btn-dark {
-      color: black;
-    }
-
-    .toastify-pro.light .toast-btn-light {
-      color: black;
+    .toastify-pro.light .toast-btn-confirm:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(248, 250, 252, 1));
+      border-color: rgba(15, 23, 42, 0.4);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
     }
 
     @media (max-width: 640px) {
@@ -972,22 +920,37 @@ class ToastifyPro {
   conf(message, descriptionOrCallback, callback) {
     // Parse arguments to support multiple usage patterns
     let description = '';
-    let onResult = null;
     let options = {};
+    let resultCallback = null;
 
-    if (typeof descriptionOrCallback === 'function') {
-      // toaster.conf('message', callback)
-      onResult = descriptionOrCallback;
-    } else if (typeof descriptionOrCallback === 'string') {
-      // toaster.conf('message', 'description', callback)
+    // Pattern 1: conf('message', callback)
+    if (typeof descriptionOrCallback === 'function' && !callback) {
+      resultCallback = descriptionOrCallback;
+    }
+    // Pattern 2: conf('message', 'description', callback)
+    else if (typeof descriptionOrCallback === 'string' && typeof callback === 'function') {
       description = descriptionOrCallback;
-      onResult = callback;
-    } else if (typeof descriptionOrCallback === 'object' && descriptionOrCallback !== null) {
-      // toaster.conf('message', { description: '', onConfirm: fn, ... })
+      resultCallback = callback;
+    }
+    // Pattern 3: conf('message', options) with onConfirm/onCancel
+    else if (typeof descriptionOrCallback === 'object' && descriptionOrCallback !== null) {
       options = descriptionOrCallback;
       description = options.description || '';
-      onResult = options.onConfirm && options.onCancel ? 
-        (confirmed) => confirmed ? options.onConfirm() : options.onCancel() : null;
+      
+      // Use onConfirm/onCancel if provided, otherwise use callback parameter
+      if (options.onConfirm || options.onCancel) {
+        // Don't use the callback parameter if onConfirm/onCancel are provided
+        resultCallback = null;
+      } else if (typeof callback === 'function') {
+        resultCallback = callback;
+      }
+    }
+    // Pattern 4: conf('message', 'description', options) - legacy support
+    else if (typeof descriptionOrCallback === 'string' && typeof callback === 'object') {
+      description = descriptionOrCallback;
+      options = callback || {};
+      // In this case, no unified callback, rely on onConfirm/onCancel
+      resultCallback = null;
     }
 
     // Default options for confirmation
@@ -996,10 +959,17 @@ class ToastifyPro {
       allowClose: false, // No close button, must choose
       confirmText: options.confirmText || 'Confirm',
       cancelText: options.cancelText || 'Cancel',
-      confirmColor: options.confirmColor || 'dark',
+      theme: options.theme || options.color || 'dark', // Support both theme and color for backward compatibility
       position: options.position || 'center', // Default to center for confirmations
       ...options
     };
+
+    // Validate and set theme to only dark or light
+    if (confirmOptions.theme === 'light' || confirmOptions.theme === 'white') {
+      confirmOptions.theme = 'light';
+    } else {
+      confirmOptions.theme = 'dark'; // Default to dark for all other values
+    }
 
     // Validate position for confirmation toast
     const validPositions = ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'top-center', 'bottom-center', 'center'];
@@ -1022,10 +992,49 @@ class ToastifyPro {
       }
     }
 
+    // Helper function to handle confirmation result
+    const handleConfirmation = (confirmed) => {
+      if (confirmed) {
+        // Call onConfirm if provided
+        if (options.onConfirm && typeof options.onConfirm === 'function') {
+          try {
+            options.onConfirm();
+          } catch (error) {
+            console.error('ToastifyPro: Error in onConfirm callback:', error);
+          }
+        }
+        // Call unified callback if provided
+        if (resultCallback && typeof resultCallback === 'function') {
+          try {
+            resultCallback(true);
+          } catch (error) {
+            console.error('ToastifyPro: Error in confirmation callback:', error);
+          }
+        }
+      } else {
+        // Call onCancel if provided
+        if (options.onCancel && typeof options.onCancel === 'function') {
+          try {
+            options.onCancel();
+          } catch (error) {
+            console.error('ToastifyPro: Error in onCancel callback:', error);
+          }
+        }
+        // Call unified callback if provided
+        if (resultCallback && typeof resultCallback === 'function') {
+          try {
+            resultCallback(false);
+          } catch (error) {
+            console.error('ToastifyPro: Error in confirmation callback:', error);
+          }
+        }
+      }
+    };
+
     try {
       // Create confirmation toast element
       const toast = document.createElement("div");
-      toast.className = `toastify-pro confirmation ${confirmOptions.confirmColor}`;
+      toast.className = `toastify-pro confirmation ${confirmOptions.theme}`;
 
       // Create close button for confirmation
       const closeBtn = document.createElement("span");
@@ -1033,8 +1042,7 @@ class ToastifyPro {
       closeBtn.innerHTML = "&times;";
       closeBtn.setAttribute('aria-label', 'Cancel confirmation');
       closeBtn.onclick = () => {
-        if (onResult) onResult(false);
-        if (options.onCancel) options.onCancel();
+        handleConfirmation(false);
         this.removeToast(toast);
       };
       toast.appendChild(closeBtn);
@@ -1074,18 +1082,16 @@ class ToastifyPro {
       cancelBtn.className = "toast-btn toast-btn-cancel";
       cancelBtn.textContent = confirmOptions.cancelText;
       cancelBtn.onclick = () => {
-        if (onResult) onResult(false);
-        if (options.onCancel) options.onCancel();
+        handleConfirmation(false);
         this.removeToast(toast);
       };
 
       // Confirm button
       const confirmBtn = document.createElement("button");
-      confirmBtn.className = `toast-btn toast-btn-confirm toast-btn-${confirmOptions.confirmColor}`;
+      confirmBtn.className = `toast-btn toast-btn-confirm`;
       confirmBtn.textContent = confirmOptions.confirmText;
       confirmBtn.onclick = () => {
-        if (onResult) onResult(true);
-        if (options.onConfirm) options.onConfirm();
+        handleConfirmation(true);
         this.removeToast(toast);
       };
 
