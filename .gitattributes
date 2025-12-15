@@ -1,0 +1,5 @@
+# Ignore HTML demo files
+*.html linguist-detectable=false
+
+# Ensure JS is detected
+*.js linguist-detectable=true
