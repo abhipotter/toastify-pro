@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/npm/l/toastify-pro.svg)](https://github.com/abhipotter/toastify-pro/blob/main/LICENSE)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/toastify-pro)](https://bundlephobia.com/package/toastify-pro)
 
-[Demo](https://abhipotter.github.io/toastify-pro) • [Documentation](https://github.com/abhipotter/toastify-pro/wiki) • [Examples](https://github.com/abhipotter/toastify-pro/tree/main/examples)
+[Demo](https://abhipotter.github.io/toastify-pro/demo) • [Documentation](https://github.com/abhipotter/toastify-pro/wiki) • [Examples](https://github.com/abhipotter/toastify-pro/tree/main/examples)
 
 </div>
 
@@ -235,8 +235,8 @@ toast.light('Settings updated', { timeout: 2000 });
 toast.light('Light Mode', 'Switched to clean light theme.'); // With description
 ```
 
-#### 🆕 `toast.conf(message, descriptionOrCallback, callback)`
-Display an interactive confirmation dialog with confirm/cancel buttons.
+#### 🆕 `toast.conf(message, descriptionOrCallback, callback)` or `toast.confirm(message, descriptionOrCallback, callback)`
+Display an interactive confirmation dialog with confirm/cancel buttons. Both methods work identically - `confirm` is the newer recommended name, while `conf` is kept for backward compatibility.
 
 **Features:**
 - 🎯 **Center positioning** (default) for maximum attention
@@ -250,8 +250,8 @@ Display an interactive confirmation dialog with confirm/cancel buttons.
 - `theme: 'light'` or `theme: 'white'` - Clean light theme with dark text
 
 ```javascript
-// Simple confirmation with callback
-toast.conf('Delete this item?', (confirmed) => {
+// Simple confirmation with callback (using newer confirm method)
+toast.confirm('Delete this item?', (confirmed) => {
     if (confirmed) {
         console.log('User confirmed');
     } else {
@@ -259,13 +259,13 @@ toast.conf('Delete this item?', (confirmed) => {
     }
 });
 
-// Confirmation with description
+// Confirmation with description (using legacy conf method)
 toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
     handleUserChoice(confirmed);
 });
 
-// Advanced confirmation with full options
-toast.conf('Save changes?', {
+// Advanced confirmation with full options (using newer confirm method)
+toast.confirm('Save changes?', {
     description: 'Your changes will be permanently saved to the server.',
     confirmText: 'Save Now',        // Custom confirm button text
     cancelText: 'Discard',          // Custom cancel button text
