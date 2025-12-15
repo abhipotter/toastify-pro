@@ -103,28 +103,28 @@
     <link
       rel="icon"
       type="image/x-icon"
-      href="https://abhipotter.github.io/toastify-pro/demo/assets/icons/favicon.ico"
+      href="https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico"
     />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="https://abhipotter.github.io/toastify-pro/demo/assets/icons/favicon.ico"
+      href="https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="https://abhipotter.github.io/toastify-pro/demo/assets/icons/favicon.ico"
+      href="https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="https://abhipotter.github.io/toastify-pro/demo/assets/icons/favicon.ico"
+      href="https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico"
     />
     <link
       rel="manifest"
-      href="https://abhipotter.github.io/toastify-pro/demo/assets/site/site.webmanifest"
+      href="https://abhipotter.github.io/toastify-pro/assets/site/site.webmanifest"
     />
 
     <!-- Structured Data - JSON-LD -->
@@ -909,10 +909,11 @@
 
       /* Enhanced Feature Grid */
       .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-        margin: 30px 0;
+       display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: 24px;
+      column-gap: 24px;
+      width: 100%;
       }
 
       .feature-card {
@@ -2437,11 +2438,21 @@ toast.conf('Save changes?').then(confirmed => {
             </div>
           </div>
 
-          <h2>
-            <i class="fas fa-star"></i> Why Choose Toastify Pro? Features &
+         
+        </section>
+      </main>
+
+        <!-- Why Choose Us Section -->
+      <section
+        class="performance-section"
+        aria-labelledby="performance-heading"
+      >
+        <h2 id="performance-heading">
+          <i class="fas fa-star"></i> Why Choose Toastify Pro? Features &
             Benefits
-          </h2>
-          <div class="feature-grid">
+        </h2>
+        <div class="performance-metrics">
+           <div class="feature-grid">
             <div class="feature-card">
               <h4>🚀 Ultra Lightweight Toast Library</h4>
               <p>
@@ -2549,9 +2560,9 @@ toast.conf('Save changes?').then(confirmed => {
                 NEW! Center position option places toasts in the exact center of the screen. Ideal for important confirmations and critical notifications.
               </p>
             </div>
-          </div>
-        </section>
-      </main>
+            </div>
+        </div>
+      </section>
 
       <!-- Performance Section -->
       <section
