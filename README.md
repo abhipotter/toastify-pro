@@ -18,8 +18,8 @@
 
 - 🚀 **Lightweight** - Minimal bundle size with zero dependencies
 - 🎨 **6 Built-in Themes** - Success, Error, Info, Warning, Dark, and Light themes
-- 🎯 **Interactive Confirmation Dialogs** - Perfect replacement for SweetAlert with dark/light themes only
-- 📱 **7 Flexible Positions** - Including new center position ideal for confirmations
+- 🎯 **Interactive Confirmation Dialogs** - Perfect replacement for SweetAlert with dark/light themes
+- 📱 **7 Flexible Positions** - Including center position ideal for confirmations
 - ⚡ **Apple-Style Animations** - Smooth AirDrop-inspired entrance and car-swipe exit effects
 - 🔧 **Framework Agnostic** - Works with React, Vue, Angular, or vanilla JS
 - 🎯 **Auto-dismiss** - Configurable timeout with manual close option
@@ -28,8 +28,9 @@
 - ♿ **Accessible** - Clean HTML structure with proper ARIA support
 - 🎨 **Custom SVG Icons** - Beautiful vector icons for each toast type
 - ✨ **Modern Design** - Glassmorphism effects with backdrop blur
-- � **Perfect Callback Handling** - No double execution, conflict-free patterns
-- ❌ **Close Button** - Interactive close buttons for confirmation dialogs
+- 🔒 **Single Instance** - Only one confirmation at a time with shake animation
+- ⏳ **Loading States** - Built-in loading spinner for async operations
+- 🎨 **Custom Gradients** - primaryColor & secondaryColor for gradient backgrounds
 
 ## 🚀 Quick Start
 
@@ -236,75 +237,132 @@ toast.light('Light Mode', 'Switched to clean light theme.'); // With description
 ```
 
 #### 🆕 `toast.conf(message, descriptionOrCallback, callback)` or `toast.confirm(message, descriptionOrCallback, callback)`
-Display an interactive confirmation dialog with confirm/cancel buttons. Both methods work identically - `confirm` is the newer recommended name, while `conf` is kept for backward compatibility.
+Display an interactive confirmation dialog with confirm/cancel buttons. Both methods work identically.
 
 **Features:**
 - 🎯 **Center positioning** (default) for maximum attention
-- ✖️ **Close button** in top-right corner (acts as cancel)
-- 🎨 **Simple theming** - Dark (default) or Light themes only
+- 🔒 **Single instance** - Only one confirmation at a time with shake animation
+- ⏳ **Loading states** - Built-in spinner for async operations
+- 🎨 **Custom gradients** - primaryColor & secondaryColor support
 - 📱 **Responsive** design for mobile devices
 - ⚡ **No auto-dismiss** - requires user interaction
 
-**Theme Options:**
-- `theme: 'dark'` (default) - Dark theme with elegant styling
-- `theme: 'light'` or `theme: 'white'` - Clean light theme with dark text
+**Options:**
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `description` | string | - | Secondary text below the message |
+| `confirmText` | string | `'Confirm'` | Custom confirm button text |
+| `cancelText` | string | `'Cancel'` | Custom cancel button text |
+| `theme` | string | `'dark'` | Theme: `'dark'` or `'light'` |
+| `position` | string | `'center'` | Any valid position |
+| `primaryColor` | string | - | Primary gradient color (hex) |
+| `secondaryColor` | string | - | Secondary gradient color (hex) |
+| `onConfirm` | function | - | Callback when confirmed |
+| `onCancel` | function | - | Callback when cancelled |
 
 ```javascript
-// Simple confirmation with callback (using newer confirm method)
-toast.confirm('Delete this item?', (confirmed) => {
+// Simple confirmation
+toast.conf('Delete this item?', (confirmed) => {
+    if (confirmed) toast.success('Deleted!');
+});
+
+// With description
+toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
+    console.log('User confirmed:', confirmed);
+});
+
+// With options
+toast.conf('Save changes?', {
+    description: 'Your changes will be saved permanently.',
+    confirmText: 'Save',
+    cancelText: 'Discard',
+    theme: 'light',
+    position: 'center'
+}, (confirmed) => {
+    if (confirmed) submitForm();
+});
+```
+
+#### ⏳ Loading States
+Handle async operations with built-in loading spinner:
+
+```javascript
+// Manual loading control
+toast.conf('Process data?', {
+    confirmText: 'Process'
+}, (confirmed, { setLoading, close }) => {
     if (confirmed) {
-        console.log('User confirmed');
-    } else {
-        console.log('User cancelled');
+        setLoading(true);  // Show spinner, disable buttons
+        
+        fetch('/api/process')
+            .then(() => {
+                setLoading(false);
+                close();
+                toast.success('Done!');
+            })
+            .catch(() => {
+                setLoading(false);
+                close();
+                toast.error('Failed!');
+            });
     }
 });
 
-// Confirmation with description (using legacy conf method)
-toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
-    handleUserChoice(confirmed);
+// Async/await (auto-loading for promises)
+toast.conf('Fetch data?', {
+    confirmText: 'Fetch',
+    onConfirm: async () => {
+        await fetch('/api/data');  // Auto shows loading
+        toast.success('Data fetched!');
+    }
 });
 
-// Advanced confirmation with full options (using newer confirm method)
-toast.confirm('Save changes?', {
-    description: 'Your changes will be permanently saved to the server.',
-    confirmText: 'Save Now',        // Custom confirm button text
-    cancelText: 'Discard',          // Custom cancel button text
-    theme: 'light',                 // Theme: 'dark' (default) or 'light'
-    position: 'center',             // Position (defaults to 'center' for confirmations)
-    onConfirm: () => saveData(),    // Alternative callback approach
-    onCancel: () => discardChanges()
+// With custom colors
+toast.conf('Upload file?', {
+    primaryColor: '#f59e0b',
+    secondaryColor: '#d97706',
+    onConfirm: async ({ setLoading, close }) => {
+        setLoading(true);
+        await uploadFile();
+        close();
+        toast.success('Uploaded!');
+    }
+});
+```
+
+#### 🎨 Custom Gradient Colors
+Create beautiful gradient backgrounds:
+
+```javascript
+// Orange gradient
+toast.conf('Custom styled!', {
+    primaryColor: '#f97316',
+    secondaryColor: '#ea580c',
+    confirmText: 'Nice!'
 });
 
-// Real-world example: Delete confirmation
-function deleteItem(itemId) {
-    toast.conf('Delete item?', 
-        'This will permanently remove the item from your account.', 
-        (confirmed) => {
-            if (confirmed) {
-                // Perform deletion
-                deleteFromServer(itemId);
-                toast.success('Item deleted successfully!');
-            } else {
-                toast.info('Delete cancelled');
-            }
-        }
-    );
-}
+// Purple gradient
+toast.conf('Purple theme', {
+    primaryColor: '#8b5cf6',
+    secondaryColor: '#6366f1'
+});
 
-// Form save confirmation
-function handleFormSubmit() {
-    toast.conf('Save changes?', {
-        description: 'Your form data will be submitted and cannot be edited later.',
-        confirmText: 'Submit',
-        cancelText: 'Keep Editing',
-        theme: 'dark', // Default theme, can be 'light'
-        position: 'center'
-    }, (confirmed) => {
-        if (confirmed) {
-            submitForm();
-        }
-    });
-}
+// Text color auto-adjusts based on background brightness
+toast.conf('Light background', {
+    primaryColor: '#fef3c7',  // Light color
+    secondaryColor: '#fde68a'  // Dark text will be used
+});
+```
+
+#### 🔒 Single Instance (Shake Effect)
+Only one confirmation dialog can be open at a time. Attempting to open another will shake the existing one:
+
+```javascript
+// First call - shows confirmation
+toast.conf('First dialog');
+
+// Second call - shakes existing dialog instead of opening new one
+toast.conf('Second dialog');  // Shakes first dialog!
 ```
 
 ### 🆕 Enhanced Features

@@ -194,7 +194,7 @@
 
     <!-- External Resources -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/toastify-pro/dist/toastify-pro.umd.min.js"></script> -->
-     <script src="/dist/toastify-pro.umd.min.js"></script>
+     <script src="../src/toastify-pro.js"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       rel="stylesheet"
@@ -577,6 +577,7 @@
         align-items: center;
         gap: 12px;
       }
+      
 
       /* Enhanced Buttons */
       .button-grid {
@@ -1332,6 +1333,11 @@
       }
 
       /* Responsive Design - Mobile First Approach */
+      @media (min-width: 1200px) {
+      .info-section{
+        width: 200%;
+      }
+      }
       @media (max-width: 1200px) {
         .main-content {
           grid-template-columns: 1fr;
@@ -2325,6 +2331,87 @@
           </div> -->
         </section>
 
+        <!-- 🆕 Confirmation Dialogs Section -->
+        <section class="demo-section" aria-labelledby="confirmation-heading">
+          <h2 id="confirmation-heading">
+            <i class="fas fa-check-double"></i> Confirmation Dialogs (conf/confirm)
+          </h2>
+          <p style="color: #94a3b8; margin-bottom: 24px; font-size: 15px;">
+            Interactive confirmation dialogs for user decisions. Single instance enforcement with shake animation.
+          </p>
+
+          <h3>Basic Confirmations</h3>
+          <div class="button-grid">
+            <button class="demo-btn" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: white;" onclick="showConfDemo('basic')" aria-label="Basic confirmation">
+              <i class="fas fa-question-circle"></i> Basic
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white;" onclick="showConfDemo('delete')" aria-label="Delete confirmation">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;" onclick="showConfDemo('save')" aria-label="Save confirmation">
+              <i class="fas fa-save"></i> Save
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;" onclick="showConfDemo('logout')" aria-label="Logout confirmation">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+
+          <h3>🎨 Custom Colors (Gradient)</h3>
+          <div class="button-grid">
+            <button class="demo-btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white;" onclick="showConfDemo('orange')" aria-label="Orange gradient">
+              <i class="fas fa-palette"></i> Orange
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white;" onclick="showConfDemo('purple')" aria-label="Purple gradient">
+              <i class="fas fa-palette"></i> Purple
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white;" onclick="showConfDemo('cyan')" aria-label="Cyan gradient">
+              <i class="fas fa-palette"></i> Cyan
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%); color: white;" onclick="showConfDemo('green')" aria-label="Green gradient">
+              <i class="fas fa-palette"></i> Green
+            </button>
+          </div>
+
+          <h3>⏳ Loading States (Async Operations)</h3>
+          <div class="button-grid">
+            <button class="demo-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white;" onclick="showConfDemo('loading-manual')" aria-label="Manual loading">
+              <i class="fas fa-spinner"></i> Manual Loading
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;" onclick="showConfDemo('loading-async')" aria-label="Async/await loading">
+              <i class="fas fa-code"></i> Async/Await
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;" onclick="showConfDemo('loading-api')" aria-label="API call example">
+              <i class="fas fa-cloud"></i> API Call
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;" onclick="showConfDemo('loading-color')" aria-label="Loading with custom color">
+              <i class="fas fa-paint-brush"></i> Loading + Color
+            </button>
+          </div>
+
+          <h3>📍 Positions & Themes</h3>
+          <div class="button-grid">
+            <button class="demo-btn" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white;" onclick="showConfDemo('dark')" aria-label="Dark theme">
+              <i class="fas fa-moon"></i> Dark Theme
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: #1e293b;" onclick="showConfDemo('light')" aria-label="Light theme">
+              <i class="fas fa-sun"></i> Light Theme
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;" onclick="showConfDemo('center')" aria-label="Center position">
+              <i class="fas fa-crosshairs"></i> Center
+            </button>
+            <button class="demo-btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white;" onclick="showConfDemo('random')" aria-label="Random position">
+              <i class="fas fa-random"></i> Random Position
+            </button>
+          </div>
+
+          <h3 style="color: #f87171;">🚫 Single Instance (Try clicking multiple times!)</h3>
+          <div class="button-grid">
+            <button class="demo-btn" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: white;" onclick="showConfDemo('shake')" aria-label="Test shake effect">
+              <i class="fas fa-exclamation-triangle"></i> Test Shake Effect
+            </button>
+          </div>
+        </section>
+
         <section class="info-section" aria-labelledby="installation-heading">
           <h2 id="installation-heading">
             <i class="fas fa-download"></i> Installation & Setup Guide
@@ -2551,13 +2638,31 @@ toast.conf('Save changes?').then(confirmed => {
             <div class="feature-card">
               <h4>🔔 Interactive Confirmation Dialogs</h4>
               <p>
-                NEW! Built-in confirmation dialogs with customizable buttons, callbacks, and themes. Perfect for delete confirmations, save dialogs, and user decisions.
+                Built-in confirmation dialogs with customizable buttons, callbacks, and themes. Perfect for delete confirmations and user decisions.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>⏳ Loading States</h4>
+              <p>
+                Built-in loading spinner for async operations. Control with setLoading() and close() functions. Works with promises and async/await.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>🎨 Custom Gradient Colors</h4>
+              <p>
+                Use primaryColor and secondaryColor for beautiful gradient backgrounds. Text color auto-adjusts based on background brightness.
+              </p>
+            </div>
+            <div class="feature-card">
+              <h4>🔒 Single Instance Mode</h4>
+              <p>
+                Only one confirmation at a time. Attempting to open another shakes the existing dialog. Prevents UI clutter and confusion.
               </p>
             </div>
             <div class="feature-card">
               <h4>🎯 Perfect Center Positioning</h4>
               <p>
-                NEW! Center position option places toasts in the exact center of the screen. Ideal for important confirmations and critical notifications.
+                Center position option places toasts in the exact center of the screen. Ideal for important confirmations and critical notifications.
               </p>
             </div>
             </div>
@@ -3060,44 +3165,95 @@ const toast = new ToastifyPro({
 
         <div class="doc-section">
           <h3>🆕 Confirmation Dialogs</h3>
-          <p>Interactive confirmation dialogs for user decisions (using either <code>confirm</code> or <code>conf</code> method):</p>
+          <p>Interactive confirmation dialogs with loading states, custom colors, and single instance enforcement.</p>
           
-          <h4>Simple Confirmation</h4>
+          <h4>Basic Usage</h4>
           <div class="code-block">
             <button class="copy-btn">Copy</button>
             <pre>
-// Using the newer confirm method (recommended)
-toast.confirm('Delete this item?').then(confirmed => {
-  if (confirmed) {
-    console.log('User confirmed');
-  } else {
-    console.log('User cancelled');
-  }
+// Simple confirmation
+toast.conf('Delete this item?', (confirmed) => {
+  if (confirmed) toast.success('Deleted!');
 });
 
-// Callback-based (using legacy conf method)
-toast.conf('Save changes?', (confirmed) => {
+// With description
+toast.conf('Are you sure?', 'This action cannot be undone.', (confirmed) => {
   console.log('User confirmed:', confirmed);
+});
+
+// With options
+toast.conf('Save changes?', {
+  description: 'Your changes will be saved.',
+  confirmText: 'Save',
+  cancelText: 'Discard',
+  theme: 'light',  // 'dark' (default) or 'light'
+  position: 'center'
+}, (confirmed) => {
+  if (confirmed) submitForm();
 });</pre
             >
           </div>
 
-          <h4>Advanced Confirmations</h4>
+          <h4>⏳ Loading States</h4>
           <div class="code-block">
             <button class="copy-btn">Copy</button>
             <pre>
-// With custom options (using newer confirm method)
-toast.confirm('Are you sure?', {
-  description: 'This action cannot be undone.',
-  confirmText: 'Yes, Delete',
-  cancelText: 'Cancel',
-  position: 'center',  // Default for confirmations
-  timeout: 0           // No auto-dismiss
-}, (confirmed) => {
+// Manual loading control
+toast.conf('Process data?', (confirmed, { setLoading, close }) => {
   if (confirmed) {
-    toast.success('Item deleted successfully');
+    setLoading(true);  // Show spinner
+    
+    fetch('/api/process').then(() => {
+      close();
+      toast.success('Done!');
+    });
+  }
+});
+
+// Async/await (auto-loading)
+toast.conf('Fetch data?', {
+  onConfirm: async () => {
+    await fetch('/api/data');
+    toast.success('Fetched!');
   }
 });</pre
+            >
+          </div>
+
+          <h4>🎨 Custom Gradient Colors</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Custom gradient background
+toast.conf('Custom styled!', {
+  primaryColor: '#f97316',
+  secondaryColor: '#ea580c',
+  confirmText: 'Nice!'
+});
+
+// Loading with custom colors
+toast.conf('Upload?', {
+  primaryColor: '#8b5cf6',
+  secondaryColor: '#6366f1',
+  onConfirm: async ({ setLoading, close }) => {
+    setLoading(true);
+    await uploadFile();
+    close();
+    toast.success('Uploaded!');
+  }
+});</pre
+            >
+          </div>
+
+          <h4>🔒 Single Instance (Shake Effect)</h4>
+          <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre>
+// Only one confirmation can be open at a time
+toast.conf('First dialog');
+
+// Attempting to open another will shake the existing one
+toast.conf('Second dialog');  // Shakes instead!</pre
             >
           </div>
         </div>
@@ -3501,7 +3657,7 @@ npm test</pre
         switch (type) {
           case "simple":
             // Using the new confirm() method - recommended way
-            toast.confirm("Are you sure?", (confirmed) => {
+            toast.conf("Are you sure?", (confirmed) => {
               if (confirmed) {
                 toast.success("You clicked Confirm!");
               } else {
@@ -3523,7 +3679,7 @@ npm test</pre
             
           case "save":
             // Using the new confirm() method with options
-            toast.confirm("Save changes?", {
+            toast.conf("Save changes?", {
               description: "Your changes will be permanently saved to the server.",
               confirmText: "Save Now",
               cancelText: "Keep Editing",
@@ -3540,10 +3696,12 @@ npm test</pre
             
           case "center":
             // Using the new confirm() method
-            toast.confirm("Experience the positioning!", {
+            toast.conf("Experience the positioning!", {
               // description: "This confirmation dialog appears in the perfect center of your screen for maximum attention.",
               confirmText: "Amazing!",
               cancelText: "Close",
+              primaryColor:'#4f46e5',
+              secondaryColor:'#06b6d4',
               position: getPosition(),
               theme: getTheme(),
               onConfirm: () => {
@@ -3570,6 +3728,206 @@ npm test</pre
                 toast.light("No problem!", "You can enable advanced features anytime from settings.");
               }
             });
+            break;
+        }
+      }
+      
+      // 🆕 Comprehensive Confirmation Demo function
+      function showConfDemo(type) {
+        updateToastInstance();
+        
+        switch (type) {
+          // === Basic Confirmations ===
+          case "basic":
+            toast.conf("Are you sure?", (confirmed) => {
+              toast[confirmed ? "success" : "info"](confirmed ? "Confirmed!" : "Cancelled");
+            });
+            break;
+            
+          case "delete":
+            toast.conf("Delete this item?", {
+              description: "This action cannot be undone.",
+              confirmText: "Delete",
+              cancelText: "Keep"
+            }, (confirmed) => {
+              if (confirmed) toast.success("Item deleted!");
+              else toast.info("Deletion cancelled");
+            });
+            break;
+            
+          case "save":
+            toast.conf("Save changes?", {
+              description: "Your changes will be saved permanently.",
+              confirmText: "Save",
+              cancelText: "Discard"
+            }, (confirmed) => {
+              if (confirmed) toast.success("Changes saved!");
+              else toast.warning("Changes discarded");
+            });
+            break;
+            
+          case "logout":
+            toast.conf("Sign out?", {
+              description: "You will need to sign in again.",
+              confirmText: "Sign Out",
+              cancelText: "Stay"
+            }, (confirmed) => {
+              if (confirmed) toast.success("Signed out successfully!");
+              else toast.info("You're still signed in");
+            });
+            break;
+            
+          // === Custom Colors ===
+          case "orange":
+            toast.conf("Orange Gradient", {
+              description: "Custom primaryColor and secondaryColor",
+              primaryColor: "#f97316",
+              secondaryColor: "#ea580c",
+              confirmText: "Love it!"
+            }, () => toast.success("Beautiful gradient!"));
+            break;
+            
+          case "purple":
+            toast.conf("Purple Gradient", {
+              description: "Elegant purple-indigo combination",
+              primaryColor: "#8b5cf6",
+              secondaryColor: "#6366f1",
+              confirmText: "Amazing!"
+            }, () => toast.success("Purple power!"));
+            break;
+            
+          case "cyan":
+            toast.conf("Cyan Gradient", {
+              description: "Fresh cyan-teal styling",
+              primaryColor: "#06b6d4",
+              secondaryColor: "#0891b2",
+              confirmText: "Cool!"
+            }, () => toast.success("So refreshing!"));
+            break;
+            
+          case "green":
+            toast.conf("Green Gradient", {
+              description: "Nature-inspired green theme",
+              primaryColor: "#84cc16",
+              secondaryColor: "#65a30d",
+              confirmText: "Go Green!"
+            }, () => toast.success("Eco-friendly!"));
+            break;
+            
+          // === Loading States ===
+          case "loading-manual":
+            toast.conf("Process data?", {
+              description: "Manual loading control with setLoading()",
+              confirmText: "Process"
+            }, (confirmed, { setLoading, close }) => {
+              if (confirmed) {
+                setLoading(true);
+                // Simulate API call
+                setTimeout(() => {
+                  setLoading(false);
+                  close();
+                  toast.success("Processing complete!");
+                }, 2000);
+              }
+            });
+            break;
+            
+          case "loading-async":
+            toast.conf("Fetch data?", {
+              description: "Auto-loading with async/await",
+              confirmText: "Fetch",
+              onConfirm: async () => {
+                // Simulating async operation
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                toast.success("Data fetched!");
+              }
+            });
+            break;
+            
+          case "loading-api":
+            toast.conf("Submit to server?", {
+              description: "Simulated API POST request",
+              confirmText: "Submit",
+              primaryColor: "#10b981",
+              secondaryColor: "#059669",
+              onConfirm: async ({ setLoading, close }) => {
+                setLoading(true);
+                try {
+                  // Simulate API call
+                  await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                      Math.random() > 0.3 ? resolve() : reject(new Error("Network error"));
+                    }, 2000);
+                  });
+                  close();
+                  toast.success("Submitted successfully!");
+                } catch (error) {
+                  setLoading(false);
+                  close();
+                  toast.error("Submission failed!", "Please try again.");
+                }
+              }
+            });
+            break;
+            
+          case "loading-color":
+            toast.conf("Upload file?", {
+              description: "Loading state with custom colors",
+              confirmText: "Upload",
+              primaryColor: "#f59e0b",
+              secondaryColor: "#d97706",
+              onConfirm: async ({ setLoading, close }) => {
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                close();
+                toast.success("File uploaded!");
+              }
+            });
+            break;
+            
+          // === Positions & Themes ===
+          case "dark":
+            toast.conf("Dark Theme", {
+              description: "Elegant dark mode styling",
+              theme: "dark",
+              confirmText: "Nice!"
+            }, () => toast.dark("Dark theme applied!"));
+            break;
+            
+          case "light":
+            toast.conf("Light Theme", {
+              description: "Clean light mode styling",
+              theme: "light",
+              confirmText: "Great!"
+            }, () => toast.light("Light theme applied!"));
+            break;
+            
+          case "center":
+            toast.conf("Center Position", {
+              description: "Perfect for important decisions",
+              position: "center",
+              confirmText: "Perfect!"
+            }, () => toast.success("Center is ideal for confirmations!"));
+            break;
+            
+          case "random":
+            const positions = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right", "center"];
+            const randomPos = positions[Math.floor(Math.random() * positions.length)];
+            toast.conf("Random Position: " + randomPos, {
+              description: "Confirmations work in all positions!",
+              position: randomPos,
+              confirmText: "Got it!"
+            }, () => toast.success("Position: " + randomPos));
+            break;
+            
+          // === Single Instance Test ===
+          case "shake":
+            toast.conf("Only one confirmation allowed!", {
+              description: "Try clicking again - see the shake effect!",
+              confirmText: "Understood",
+              primaryColor: "#ef4444",
+              secondaryColor: "#b91c1c"
+            }, () => toast.success("Single instance enforced!"));
             break;
         }
       }

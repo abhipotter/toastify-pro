@@ -20,6 +20,10 @@
  * @author ToastifyPro Team
  * @license MIT
  */
+
+// Global active confirmation tracker (shared across all instances)
+let globalActiveConfirmation = null;
+
 class ToastifyPro {
   /**
    * Creates a new ToastifyPro instance
@@ -299,6 +303,26 @@ class ToastifyPro {
       100% { transform: translateX(100%); }
     }
     
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0); }
+      10%, 30%, 50%, 70%, 90% { transform: translate(-10px, 0); }
+      20%, 40%, 60%, 80% { transform: translate(10px, 0); }
+    }
+    
+    @keyframes shakeCenter {
+      0%, 100% { transform: scale(1) translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: scale(1) translateX(-10px); }
+      20%, 40%, 60%, 80% { transform: scale(1) translateX(10px); }
+    }
+    
+    .toastify-pro.shake {
+      animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+    }
+    
+    .toastify-pro-container.center .toastify-pro.shake {
+      animation: shakeCenter 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+    }
+    
     .toastify-pro.show { 
       opacity: 1; 
       transform: scale(1);
@@ -401,6 +425,11 @@ class ToastifyPro {
         opacity: 0;
       }
     }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     .toastify-pro .toast-icon svg {
       width: 18px;
@@ -481,15 +510,23 @@ class ToastifyPro {
       .toastify-pro-container.bottom-right { right: 16px; }
     }
 
-    /* Confirmation Toast Styles */
+    /* Confirmation Toast Styles - Enhanced Modern Design */
     .toastify-pro.confirmation {
-      min-width: 320px;
-      max-width: 450px;
-      padding: 24px;
+      min-width: 380px;
+      max-width: 500px;
+      padding: 32px 28px 28px;
       flex-direction: column;
       align-items: stretch;
-      gap: 20px;
+      gap: 24px;
       position: relative;
+      backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: 
+        0 24px 48px -12px rgba(0, 0, 0, 0.25),
+        0 12px 24px -8px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
     }
 
     /* Hide progress bar for confirmation toasts */
@@ -497,62 +534,94 @@ class ToastifyPro {
       display: none;
     }
 
+    /* Shimmer effect for confirmation toasts */
+    .toastify-pro.confirmation::before {
+      opacity: 0.5;
+    }
+
     /* Close button for confirmation dialogs */
     .toastify-pro.confirmation .conf-close-btn {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 14px;
+      right: 14px;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 20px;
       color: inherit;
-      opacity: 0.6;
-      padding: 4px;
-      border-radius: 50%;
-      transition: all 0.2s ease;
-      width: 24px;
-      height: 24px;
+      opacity: 0.5;
+      padding: 6px;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(10px);
       font-weight: 300;
       line-height: 1;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     
     .toastify-pro.confirmation .conf-close-btn:hover { 
-      opacity: 1; 
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.1);
-      border-color: rgba(255, 255, 255, 0.2);
+      opacity: 0.9; 
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.1) rotate(90deg);
+      border-color: rgba(255, 255, 255, 0.25);
     }
     
     .toastify-pro.confirmation.light .conf-close-btn {
-      background: rgba(15, 23, 42, 0.08);
-      border-color: rgba(15, 23, 42, 0.1);
+      background: rgba(15, 23, 42, 0.06);
+      border-color: rgba(15, 23, 42, 0.12);
+      opacity: 0.6;
     }
     
     .toastify-pro.confirmation.light .conf-close-btn:hover { 
-      background: rgba(15, 23, 42, 0.15);
+      background: rgba(15, 23, 42, 0.12);
       border-color: rgba(15, 23, 42, 0.2);
+      opacity: 1;
+    }
+
+    /* Icon styling for confirmation */
+    .toastify-pro.confirmation .toast-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 8px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .toastify-pro.confirmation .toast-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .toastify-pro.confirmation.light .toast-icon {
+      background: rgba(15, 23, 42, 0.08);
+      border-color: rgba(15, 23, 42, 0.15);
     }
 
     .toastify-pro.confirmation .toast-content {
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
 
     .toastify-pro.confirmation .toast-message {
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
     }
 
     .toastify-pro.confirmation .toast-description {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-top: 6px;
+      font-size: 15px;
+      opacity: 0.85;
+      margin-top: 8px;
+      line-height: 1.5;
+      font-weight: 400;
     }
 
     /* Fix text visibility for dark/light variants */
@@ -568,54 +637,80 @@ class ToastifyPro {
 
     .toast-actions {
       display: flex;
-      gap: 12px;
-      margin-top: 8px;
+      gap: 14px;
+      margin-top: 4px;
     }
 
     .toast-btn {
       flex: 1;
-      padding: 10px 16px;
+      padding: 14px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.01em;
+    }
+
+    .toast-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .toast-btn:hover::after {
+      width: 300px;
+      height: 300px;
     }
 
     .toast-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     }
 
     .toast-btn:active {
       transform: translateY(0);
+      transition: all 0.1s;
     }
 
     .toast-btn-cancel {
       background: rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      font-weight: 600;
     }
 
     .toast-btn-cancel:hover {
       background: rgba(255, 255, 255, 0.15);
-      color: rgba(255, 255, 255, 0.9);
-      border-color: rgba(255, 255, 255, 0.4);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+    
+    .toast-btn-cancel:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     .toast-btn-confirm {
       color: white;
       font-weight: 700;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
-      border-color: rgba(148, 163, 184, 0.5);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
     }
 
     .toast-btn-confirm::before {
@@ -625,8 +720,8 @@ class ToastifyPro {
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transition: left 0.6s;
     }
 
     .toast-btn-confirm:hover::before {
@@ -635,13 +730,38 @@ class ToastifyPro {
 
     .toast-btn-confirm:hover {
       background: linear-gradient(135deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 1));
-      border-color: rgba(148, 163, 184, 0.7);
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.4);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.5);
+    }
+    
+    .toast-btn-confirm.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    
+    .toast-btn-confirm .btn-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+    
+    .toast-btn-confirm.loading .btn-spinner {
+      display: inline-block;
+    }
+    
+    .toast-btn-confirm.loading .btn-text {
+      opacity: 0.7;
     }
 
     .toastify-pro.light .toast-btn-cancel {
       background: rgba(15, 23, 42, 0.08);
-      color: rgba(15, 23, 42, 0.8);
+      color: rgba(15, 23, 42, 0.85);
       border-color: rgba(15, 23, 42, 0.2);
     }
 
@@ -653,15 +773,15 @@ class ToastifyPro {
 
     /* Enhanced light theme confirm buttons */
     .toastify-pro.light .toast-btn-confirm {
-      border-color: rgba(15, 23, 42, 0.3);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
-      color: #1e293b;
+      border-color: rgba(15, 23, 42, 0.35);
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
     }
 
     .toastify-pro.light .toast-btn-confirm:hover {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(248, 250, 252, 1));
-      border-color: rgba(15, 23, 42, 0.4);
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-color: rgba(15, 23, 42, 0.5);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.3);
     }
 
     @media (max-width: 640px) {
@@ -918,6 +1038,25 @@ class ToastifyPro {
    * @param {Function} callback - Callback function (if description provided)
    */
   conf(message, descriptionOrCallback, callback) {
+    // Check if there's already an active confirmation (GLOBAL CHECK)
+    if (globalActiveConfirmation && globalActiveConfirmation.element && globalActiveConfirmation.element.parentNode) {
+      // Trigger shake animation on existing confirmation toast element
+      const existingToast = globalActiveConfirmation.element;
+      existingToast.classList.remove('shake');
+      // Force reflow to restart animation
+      void existingToast.offsetWidth;
+      existingToast.classList.add('shake');
+      
+      // Remove shake class after animation completes
+      setTimeout(() => {
+        if (existingToast && existingToast.parentNode) {
+          existingToast.classList.remove('shake');
+        }
+      }, 600);
+      
+      return globalActiveConfirmation;
+    }
+    
     // Parse arguments to support multiple usage patterns
     let description = '';
     let options = {};
@@ -961,6 +1100,9 @@ class ToastifyPro {
       cancelText: options.cancelText || 'Cancel',
       theme: options.theme || options.color || 'dark', // Support both theme and color for backward compatibility
       position: options.position || 'center', // Default to center for confirmations
+      primaryColor: options.primaryColor || null,
+      secondaryColor: options.secondaryColor || null,
+      loading: options.loading || false, // Support external loading state (for React/Vue)
       ...options
     };
 
@@ -969,6 +1111,23 @@ class ToastifyPro {
       confirmOptions.theme = 'light';
     } else {
       confirmOptions.theme = 'dark'; // Default to dark for all other values
+    }
+
+    // Helper function to determine if a color is light or dark
+    const isLightColor = (color) => {
+      if (!color) return false;
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+      return brightness > 155;
+    };
+
+    // Determine text color based on background
+    let textColor = confirmOptions.theme === 'light' ? '#1e293b' : 'white';
+    if (confirmOptions.primaryColor) {
+      textColor = isLightColor(confirmOptions.primaryColor) ? '#1e293b' : 'white';
     }
 
     // Validate position for confirmation toast
@@ -992,26 +1151,108 @@ class ToastifyPro {
       }
     }
 
+    // Create control functions for loading state
+    let confirmBtnElement = null;
+    let cancelBtnElement = null;
+    let closeBtnElement = null;
+    let isLoading = false;
+    let useLoading = false; // Track if user wants loading behavior
+    let toastElement = null; // Reference to toast element
+    
+    const setLoading = (loading) => {
+      useLoading = true; // User is manually controlling loading
+      isLoading = loading;
+      if (confirmBtnElement) {
+        if (loading) {
+          confirmBtnElement.classList.add('loading');
+          confirmBtnElement.disabled = true;
+        } else {
+          confirmBtnElement.classList.remove('loading');
+          confirmBtnElement.disabled = false;
+        }
+      }
+      // Disable/enable cancel and close buttons during loading
+      if (cancelBtnElement) {
+        cancelBtnElement.disabled = loading;
+        cancelBtnElement.style.opacity = loading ? '0.5' : '1';
+        cancelBtnElement.style.cursor = loading ? 'not-allowed' : 'pointer';
+      }
+      if (closeBtnElement) {
+        closeBtnElement.style.opacity = loading ? '0.3' : '0.5';
+        closeBtnElement.style.cursor = loading ? 'not-allowed' : 'pointer';
+        closeBtnElement.style.pointerEvents = loading ? 'none' : 'auto';
+      }
+    };
+    
+    const closeConfirmation = () => {
+      if (toastElement && toastElement.parentNode) {
+        globalActiveConfirmation = null;
+        this.removeToast(toastElement);
+      }
+    };
+    
     // Helper function to handle confirmation result
-    const handleConfirmation = (confirmed) => {
+    const handleConfirmation = async (confirmed) => {
       if (confirmed) {
         // Call onConfirm if provided
         if (options.onConfirm && typeof options.onConfirm === 'function') {
           try {
-            options.onConfirm();
+            const result = options.onConfirm({ setLoading, close: closeConfirmation });
+            // Check if it's a promise
+            if (result && typeof result.then === 'function') {
+              // If user didn't manually set loading, auto-set it
+              if (!useLoading) {
+                setLoading(true);
+              }
+              await result;
+              // Auto-close after promise resolves if user didn't manually close
+              if (toastElement && toastElement.parentNode) {
+                setLoading(false);
+                closeConfirmation();
+              }
+            } else {
+              // Synchronous callback - only close if user didn't start loading
+              if (!useLoading) {
+                closeConfirmation();
+              }
+            }
           } catch (error) {
             console.error('ToastifyPro: Error in onConfirm callback:', error);
+            setLoading(false);
+            closeConfirmation();
           }
         }
         // Call unified callback if provided
-        if (resultCallback && typeof resultCallback === 'function') {
+        else if (resultCallback && typeof resultCallback === 'function') {
           try {
-            resultCallback(true);
+            const result = resultCallback(true, { setLoading, close: closeConfirmation });
+            if (result && typeof result.then === 'function') {
+              if (!useLoading) {
+                setLoading(true);
+              }
+              await result;
+              if (toastElement && toastElement.parentNode) {
+                setLoading(false);
+                closeConfirmation();
+              }
+            } else {
+              if (!useLoading) {
+                closeConfirmation();
+              }
+            }
           } catch (error) {
             console.error('ToastifyPro: Error in confirmation callback:', error);
+            setLoading(false);
+            closeConfirmation();
           }
+        } else {
+          // No callback - just close
+          closeConfirmation();
         }
       } else {
+        // Cancel - no loading needed, check if not currently loading
+        if (isLoading) return; // Don't allow cancel while loading
+        
         // Call onCancel if provided
         if (options.onCancel && typeof options.onCancel === 'function') {
           try {
@@ -1028,6 +1269,7 @@ class ToastifyPro {
             console.error('ToastifyPro: Error in confirmation callback:', error);
           }
         }
+        closeConfirmation();
       }
     };
 
@@ -1035,6 +1277,30 @@ class ToastifyPro {
       // Create confirmation toast element
       const toast = document.createElement("div");
       toast.className = `toastify-pro confirmation ${confirmOptions.theme}`;
+      
+      // Store reference to toast element
+      toastElement = toast;
+
+      // Apply custom colors if provided
+      if (confirmOptions.primaryColor) {
+        const primary = confirmOptions.primaryColor;
+        const secondary = confirmOptions.secondaryColor;
+        
+        if (secondary) {
+          // Both colors provided - create gradient
+          toast.style.background = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`;
+        } else {
+          // Only primary color - solid with slight transparency
+          toast.style.background = primary;
+        }
+        
+        // Set text color based on background brightness
+        toast.style.color = textColor;
+        
+        // Adjust border color to match
+        const borderOpacity = isLightColor(primary) ? '0.2' : '0.15';
+        toast.style.borderColor = `rgba(255, 255, 255, ${borderOpacity})`;
+      }
 
       // Create close button for confirmation
       const closeBtn = document.createElement("span");
@@ -1042,15 +1308,23 @@ class ToastifyPro {
       closeBtn.innerHTML = "&times;";
       closeBtn.setAttribute('aria-label', 'Cancel confirmation');
       closeBtn.onclick = () => {
-        handleConfirmation(false);
-        this.removeToast(toast);
+        if (!isLoading) {
+          handleConfirmation(false);
+        }
       };
+      if (confirmOptions.primaryColor) {
+        closeBtn.style.color = textColor;
+      }
+      closeBtnElement = closeBtn;
       toast.appendChild(closeBtn);
 
       // Create icon wrapper
       const iconWrapper = document.createElement("div");
       iconWrapper.className = "toast-icon";
       iconWrapper.innerHTML = this.getIconSVG('info'); // Default to info icon
+      if (confirmOptions.primaryColor) {
+        iconWrapper.style.color = textColor;
+      }
       toast.appendChild(iconWrapper);
 
       // Create content wrapper
@@ -1061,6 +1335,9 @@ class ToastifyPro {
       const messageElement = document.createElement("div");
       messageElement.className = "toast-message";
       messageElement.textContent = message.substring(0, this.defaultOptions.maxLength);
+      if (confirmOptions.primaryColor) {
+        messageElement.style.color = textColor;
+      }
       contentWrapper.appendChild(messageElement);
       
       // Optional description
@@ -1068,6 +1345,9 @@ class ToastifyPro {
         const descriptionElement = document.createElement("div");
         descriptionElement.className = "toast-description";
         descriptionElement.textContent = description.substring(0, this.defaultOptions.maxLength * 2);
+        if (confirmOptions.primaryColor) {
+          descriptionElement.style.color = textColor;
+        }
         contentWrapper.appendChild(descriptionElement);
       }
       
@@ -1082,18 +1362,64 @@ class ToastifyPro {
       cancelBtn.className = "toast-btn toast-btn-cancel";
       cancelBtn.textContent = confirmOptions.cancelText;
       cancelBtn.onclick = () => {
-        handleConfirmation(false);
-        this.removeToast(toast);
+        if (!isLoading) {
+          handleConfirmation(false);
+        }
       };
+      
+      // Store cancel button reference
+      cancelBtnElement = cancelBtn;
+      
+      // Style cancel button with custom colors
+      if (confirmOptions.primaryColor) {
+        const isLight = isLightColor(confirmOptions.primaryColor);
+        cancelBtn.style.background = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.1)';
+        cancelBtn.style.color = textColor;
+        cancelBtn.style.borderColor = isLight ? 'rgba(15, 23, 42, 0.2)' : 'rgba(255, 255, 255, 0.25)';
+      }
 
       // Confirm button
       const confirmBtn = document.createElement("button");
       confirmBtn.className = `toast-btn toast-btn-confirm`;
-      confirmBtn.textContent = confirmOptions.confirmText;
+      
+      // Create spinner element
+      const spinner = document.createElement("span");
+      spinner.className = "btn-spinner";
+      confirmBtn.appendChild(spinner);
+      
+      // Create text wrapper
+      const textWrapper = document.createElement("span");
+      textWrapper.className = "btn-text";
+      textWrapper.textContent = confirmOptions.confirmText;
+      confirmBtn.appendChild(textWrapper);
+      
       confirmBtn.onclick = () => {
-        handleConfirmation(true);
-        this.removeToast(toast);
+        if (!isLoading) {
+          handleConfirmation(true);
+        }
       };
+      
+      // Store reference for loading state control
+      confirmBtnElement = confirmBtn;
+      
+      // Style confirm button with custom colors
+      if (confirmOptions.primaryColor) {
+        const primary = confirmOptions.primaryColor;
+        const secondary = confirmOptions.secondaryColor;
+        const isLight = isLightColor(primary);
+        
+        if (secondary) {
+          // Gradient confirm button
+          confirmBtn.style.background = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`;
+        } else {
+          // Solid color confirm button with enhanced styling
+          confirmBtn.style.background = primary;
+        }
+        
+        // Determine button text color (always use contrasting color for readability)
+        confirmBtn.style.color = isLight ? '#1e293b' : 'white';
+        confirmBtn.style.borderColor = isLight ? 'rgba(15, 23, 42, 0.3)' : 'rgba(255, 255, 255, 0.4)';
+      }
 
       actionsWrapper.appendChild(cancelBtn);
       actionsWrapper.appendChild(confirmBtn);
@@ -1101,6 +1427,21 @@ class ToastifyPro {
 
       // Add toast to the specified container (not default container)
       confirmContainer.appendChild(toast);
+      
+      // Create control object
+      const controlObject = {
+        element: toast,
+        setLoading: setLoading,
+        close: closeConfirmation
+      };
+      
+      // Store as global active confirmation (with control object)
+      globalActiveConfirmation = controlObject;
+      
+      // Apply initial loading state if provided (for React/Vue)
+      if (confirmOptions.loading) {
+        setLoading(true);
+      }
 
       // Entrance animation
       setTimeout(() => {
@@ -1111,10 +1452,21 @@ class ToastifyPro {
         }
       }, 10);
 
-      return toast;
+      // Return control object with toast element and control functions
+      return controlObject;
     } catch (error) {
       console.error('ToastifyPro: Failed to create confirmation toast:', error);
     }
+  }
+
+  /**
+   * Alias for conf() method - shows a confirmation toast
+   * @param {string} message - Main confirmation question
+   * @param {string|Function|Object} descriptionOrCallback - Description text, callback function, or options object
+   * @param {Function} callback - Callback function (if description provided)
+   */
+  confirm(message, descriptionOrCallback, callback) {
+    return this.conf(message, descriptionOrCallback, callback);
   }
 }
 
