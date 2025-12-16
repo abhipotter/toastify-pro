@@ -710,6 +710,9 @@ class ToastifyPro {
     }
 
     .toast-btn-confirm {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: white;
       font-weight: 700;
       border: 2px solid rgba(255, 255, 255, 0.4);
@@ -748,17 +751,20 @@ class ToastifyPro {
     
     .toast-btn-confirm .btn-spinner {
       display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      margin-right: 8px;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+    }
+    
+    .toast-btn-confirm .btn-spinner svg {
+      width: 25px;
+      height: 25px;
+      animation: spin 1s linear infinite;
+      color: currentColor;
     }
     
     .toast-btn-confirm.loading .btn-spinner {
-      display: inline-block;
+      display: inline-flex;
     }
     
     .toast-btn-confirm.loading .btn-text {
@@ -1633,17 +1639,23 @@ class ToastifyPro {
       // Confirm button
       const confirmBtn = document.createElement("button");
       confirmBtn.className = `toast-btn toast-btn-confirm`;
-      
-      // Create spinner element
-      const spinner = document.createElement("span");
-      spinner.className = "btn-spinner";
-      confirmBtn.appendChild(spinner);
-      
-      // Create text wrapper
+
+            // Create text wrapper
       const textWrapper = document.createElement("span");
       textWrapper.className = "btn-text";
       textWrapper.textContent = confirmOptions.confirmText;
       confirmBtn.appendChild(textWrapper);
+      
+      // Create spinner element with custom SVG
+      const spinner = document.createElement("span");
+      spinner.className = "btn-spinner";
+      spinner.innerHTML = `
+        <svg width="25" height="25" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.5 2.9375V5.5625M9.5 13.4375V16.0625M2.9375 9.5H5.5625M13.4375 9.5H16.0625" stroke="currentColor" stroke-width="1.875" stroke-linecap="round" />
+          <path d="M4.86011 4.85961L6.71627 6.71577M12.2847 12.2842L14.1409 14.1404M4.86011 14.1404L6.71627 12.2842M12.2847 6.71577L14.1409 4.85961" stroke="currentColor" stroke-width="1.875" stroke-linecap="round" />
+        </svg>
+      `;
+      confirmBtn.appendChild(spinner);
       
       confirmBtn.onclick = () => {
         if (!isLoading) {
