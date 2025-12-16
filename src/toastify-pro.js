@@ -9,14 +9,16 @@
  * - Position-aware car swipe exit animations  
  * - Description support for enhanced messaging
  * - Six theme variants (success, error, info, warning, dark, light)
+ * - Custom color toasts with gradient support (custom method)
  * - Progress bar with shimmer effects
  * - Responsive design for mobile devices
  * - Framework agnostic (works with React, Vue, Angular, etc.)
  * - Confirmation dialogs with customizable buttons and callbacks
+ * - Confirmation overlay with blur effect for focus
  * - Center position support for enhanced focus
  * - Independent positioning for confirmations
  * 
- * @version 1.3.0
+ * @version 1.5.0
  * @author ToastifyPro Team
  * @license MIT
  */
@@ -32,6 +34,8 @@ class ToastifyPro {
    * @param {number} options.timeout - Auto-dismiss timeout in milliseconds (0 to disable)
    * @param {boolean} options.allowClose - Whether to show close button
    * @param {number} options.maxLength - Maximum message length
+   * @param {string} options.primaryColor - Primary color for custom() method
+   * @param {string} options.secondaryColor - Secondary color for gradient in custom() method
    */
   constructor(options = {}) {
     // Validate options parameter
@@ -46,6 +50,8 @@ class ToastifyPro {
       timeout: options.timeout || 3000,
       allowClose: options.allowClose !== false, // default true
       maxLength: options.maxLength || 100,
+      primaryColor: options.primaryColor || null, // Custom primary color for custom() method
+      secondaryColor: options.secondaryColor || null, // Custom secondary color for gradient
     };
 
     // Validate position
@@ -790,6 +796,58 @@ class ToastifyPro {
         max-width: calc(100vw - 32px);
       }
     }
+    
+    /* Custom toast type */
+    .toastify-pro.custom {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .toastify-pro.custom.light-text {
+      color: #1e293b;
+    }
+    
+    .toastify-pro.custom.light-text .toast-icon {
+      background: rgba(15, 23, 42, 0.1);
+    }
+    
+    .toastify-pro.custom.light-text .close-btn {
+      background: rgba(15, 23, 42, 0.08);
+    }
+    
+    .toastify-pro.custom.light-text .close-btn:hover {
+      background: rgba(15, 23, 42, 0.15);
+    }
+    
+    .toastify-pro.custom.light-text::before {
+      background: linear-gradient(90deg, 
+        rgba(30, 41, 59, 0.8) 0%,
+        rgba(30, 41, 59, 0.4) 50%,
+        rgba(30, 41, 59, 0.8) 100%);
+    }
+    
+    .toastify-pro.custom.light-text::after {
+      background: rgba(30, 41, 59, 0.6);
+    }
+    
+    /* Confirmation Overlay */
+    .toastify-pro-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 9998;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+    }
+    
+    .toastify-pro-overlay.show {
+      opacity: 1;
+    }
   `;
       document.head.appendChild(style);
     } catch (error) {
@@ -1032,6 +1090,168 @@ class ToastifyPro {
   }
 
   /**
+   * Shows a custom-colored toast notification with gradient support
+   * @param {string} msg - Main message
+   * @param {string|Object} opts - Description string or options object
+   * @param {string} opts.primaryColor - Primary color for the toast
+   * @param {string} opts.secondaryColor - Secondary color for gradient (optional)
+   */
+  custom(msg, opts) {
+    if (typeof opts === 'string') {
+      opts = { description: opts };
+    }
+    
+    opts = opts || {};
+    
+    // Get colors from options or use default options
+    const primaryColor = opts.primaryColor || this.defaultOptions.primaryColor;
+    const secondaryColor = opts.secondaryColor || this.defaultOptions.secondaryColor;
+    
+    // If no custom colors provided, fallback to success style
+    if (!primaryColor) {
+      return this.success(msg, opts);
+    }
+    
+    // Helper function to determine if a color is light
+    const isLightColor = (color) => {
+      if (!color) return false;
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+      return brightness > 155;
+    };
+    
+    // Helper function to lighten or darken a color
+    const adjustColor = (color, percent) => {
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      
+      const adjust = (c) => {
+        const adjusted = Math.round(c + (percent / 100) * (percent > 0 ? (255 - c) : c));
+        return Math.max(0, Math.min(255, adjusted));
+      };
+      
+      const newR = adjust(r).toString(16).padStart(2, '0');
+      const newG = adjust(g).toString(16).padStart(2, '0');
+      const newB = adjust(b).toString(16).padStart(2, '0');
+      
+      return `#${newR}${newG}${newB}`;
+    };
+    
+    // Determine gradient colors
+    let gradientStart = primaryColor;
+    let gradientEnd;
+    
+    if (secondaryColor) {
+      // Both colors provided
+      gradientEnd = secondaryColor;
+    } else {
+      // Only primary color - create gradient with lighter/darker shade
+      const isLight = isLightColor(primaryColor);
+      gradientEnd = isLight ? adjustColor(primaryColor, -25) : adjustColor(primaryColor, 25);
+    }
+    
+    // Determine text color
+    const needsLightText = isLightColor(primaryColor);
+    
+    // Create custom options
+    const customOpts = {
+      ...opts,
+      customGradient: `linear-gradient(135deg, ${gradientStart} 0%, ${gradientEnd} 100%)`,
+      customTextLight: needsLightText
+    };
+    
+    this.showCustom(msg, customOpts);
+  }
+
+  /**
+   * Internal method to show a custom-styled toast
+   * @param {string} message - Main message text
+   * @param {Object} opts - Options including customGradient and customTextLight
+   */
+  showCustom(message, opts = {}) {
+    if (typeof message !== 'string') {
+      message = String(message);
+    }
+
+    if (!message.trim()) {
+      console.warn('ToastifyPro: Empty message provided.');
+      return;
+    }
+
+    const options = { ...this.defaultOptions, ...opts };
+
+    try {
+      const toast = document.createElement("div");
+      toast.className = `toastify-pro custom${options.customTextLight ? ' light-text' : ''}`;
+      
+      // Apply custom gradient
+      if (options.customGradient) {
+        toast.style.background = options.customGradient;
+      }
+      
+      if (options.timeout > 0) {
+        toast.style.setProperty('--duration', `${options.timeout}ms`);
+      }
+
+      // Create icon wrapper
+      const iconWrapper = document.createElement("div");
+      iconWrapper.className = "toast-icon";
+      iconWrapper.innerHTML = this.getIconSVG('success'); // Use success icon for custom
+      toast.appendChild(iconWrapper);
+
+      // Create content wrapper
+      const contentWrapper = document.createElement("div");
+      contentWrapper.className = "toast-content";
+      
+      const messageElement = document.createElement("div");
+      messageElement.className = "toast-message";
+      messageElement.textContent = message.substring(0, options.maxLength);
+      contentWrapper.appendChild(messageElement);
+      
+      if (options.description && typeof options.description === 'string') {
+        const descriptionElement = document.createElement("div");
+        descriptionElement.className = "toast-description";
+        descriptionElement.textContent = options.description.substring(0, options.maxLength * 2);
+        contentWrapper.appendChild(descriptionElement);
+      }
+      
+      toast.appendChild(contentWrapper);
+
+      if (options.allowClose) {
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn";
+        closeBtn.innerHTML = "&times;";
+        closeBtn.setAttribute('aria-label', 'Close notification');
+        closeBtn.onclick = () => this.removeToast(toast);
+        toast.appendChild(closeBtn);
+      }
+
+      this.container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add("show");
+        const icon = toast.querySelector('.toast-icon');
+        if (icon) {
+          icon.style.animation = 'iconBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }
+      }, 10);
+
+      if (options.timeout > 0) {
+        setTimeout(() => this.removeToast(toast), options.timeout);
+      }
+
+      return toast;
+    } catch (error) {
+      console.error('ToastifyPro: Failed to create custom toast:', error);
+    }
+  }
+
+  /**
    * Shows a confirmation toast with confirm/cancel buttons
    * @param {string} message - Main confirmation question
    * @param {string|Function|Object} descriptionOrCallback - Description text, callback function, or options object
@@ -1158,6 +1378,34 @@ class ToastifyPro {
     let isLoading = false;
     let useLoading = false; // Track if user wants loading behavior
     let toastElement = null; // Reference to toast element
+    let overlayElement = null; // Reference to overlay element
+    
+    // Create overlay for confirmation
+    const createOverlay = () => {
+      overlayElement = document.createElement("div");
+      overlayElement.className = "toastify-pro-overlay";
+      document.body.appendChild(overlayElement);
+      
+      // Trigger show animation
+      setTimeout(() => {
+        overlayElement.classList.add("show");
+      }, 10);
+      
+      return overlayElement;
+    };
+    
+    // Remove overlay
+    const removeOverlay = () => {
+      if (overlayElement && overlayElement.parentNode) {
+        overlayElement.classList.remove("show");
+        setTimeout(() => {
+          if (overlayElement && overlayElement.parentNode) {
+            overlayElement.remove();
+          }
+          overlayElement = null;
+        }, 300);
+      }
+    };
     
     const setLoading = (loading) => {
       useLoading = true; // User is manually controlling loading
@@ -1187,6 +1435,7 @@ class ToastifyPro {
     const closeConfirmation = () => {
       if (toastElement && toastElement.parentNode) {
         globalActiveConfirmation = null;
+        removeOverlay(); // Remove the overlay when closing
         this.removeToast(toastElement);
       }
     };
@@ -1274,6 +1523,9 @@ class ToastifyPro {
     };
 
     try {
+      // Create overlay first
+      createOverlay();
+      
       // Create confirmation toast element
       const toast = document.createElement("div");
       toast.className = `toastify-pro confirmation ${confirmOptions.theme}`;

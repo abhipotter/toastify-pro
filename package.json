@@ -1,6 +1,6 @@
 {
   "name": "toastify-pro",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "description": "A lightweight customizable toast notification library with interactive confirmation dialogs, center positioning, and perfect callback handling. SweetAlert alternative.",
   "main": "dist/toastify-pro.umd.js",
   "module": "dist/toastify-pro.esm.js",

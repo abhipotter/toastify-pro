@@ -2247,6 +2247,28 @@
             >
               <i class="fas fa-icons"></i> Custom Icons
             </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                color: white;
+              "
+              onclick="showCustomToast('custom')"
+              aria-label="Show custom gradient toast"
+            >
+              <i class="fas fa-palette"></i> Custom Gradient
+            </button>
+            <button
+              class="demo-btn"
+              style="
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                color: white;
+              "
+              onclick="showCustomToast('custom-single')"
+              aria-label="Show custom single color toast"
+            >
+              <i class="fas fa-paint-brush"></i> Custom Color
+            </button>
             <!-- <button
               class="demo-btn"
               style="
@@ -3645,6 +3667,21 @@ npm test</pre
             toast.dark("Modern Glassmorphism Design", {
               description: "Backdrop blur effects with translucent backgrounds",
               timeout: 4000
+            });
+            break;
+          case "custom":
+            // Custom color toast with gradient
+            toast.custom("Custom Gradient Toast!", {
+              description: "Using primaryColor and secondaryColor for custom styling",
+              primaryColor: "#6366f1",
+              secondaryColor: "#a855f7"
+            });
+            break;
+          case "custom-single":
+            // Custom color toast with single color
+            toast.custom("Single Color Toast!", {
+              description: "Auto-generates gradient from one color",
+              primaryColor: "#f59e0b"
             });
             break;
         }
