@@ -17,8 +17,13 @@
  * - Confirmation overlay with blur effect for focus
  * - Center position support for enhanced focus
  * - Independent positioning for confirmations
+ * - Action buttons in toasts with customizable callbacks
+ * - Pause on hover functionality
+ * - Queue management (maxToasts, newestOnTop)
+ * - Full accessibility support (ARIA, keyboard navigation, reduced motion)
+ * - Focus management for confirmation dialogs
  * 
- * @version 1.5.0
+ * @version 1.6.0
  * @author ToastifyPro Team
  * @license MIT
  */
@@ -36,6 +41,10 @@ class ToastifyPro {
    * @param {number} options.maxLength - Maximum message length
    * @param {string} options.primaryColor - Primary color for custom() method
    * @param {string} options.secondaryColor - Secondary color for gradient in custom() method
+   * @param {boolean} options.pauseOnHover - Pause timeout when hovering over toast (default: true)
+   * @param {number} options.maxToasts - Maximum number of visible toasts (0 for unlimited)
+   * @param {boolean} options.newestOnTop - Show newest toasts on top (default: true)
+   * @param {boolean} options.ariaLive - ARIA live region setting: 'polite' or 'assertive' (default: 'polite')
    */
   constructor(options = {}) {
     // Validate options parameter
@@ -52,7 +61,14 @@ class ToastifyPro {
       maxLength: options.maxLength || 100,
       primaryColor: options.primaryColor || null, // Custom primary color for custom() method
       secondaryColor: options.secondaryColor || null, // Custom secondary color for gradient
+      pauseOnHover: options.pauseOnHover !== false, // default true - pause timeout on hover
+      maxToasts: options.maxToasts || 0, // 0 = unlimited
+      newestOnTop: options.newestOnTop !== false, // default true
+      ariaLive: options.ariaLive || 'polite', // 'polite' or 'assertive'
     };
+    
+    // Track active toasts for queue management
+    this.activeToasts = [];
 
     // Validate position
     const validPositions = ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'top-center', 'bottom-center', 'center'];
@@ -85,6 +101,46 @@ class ToastifyPro {
 
     // Inject styles once
     this.injectStyles();
+    
+    // Setup global keyboard event listener for accessibility
+    this.setupKeyboardNavigation();
+  }
+  
+  /**
+   * Sets up keyboard navigation for accessibility
+   * - Escape key dismisses the most recent toast or confirmation
+   * - Tab key cycles through focusable elements in confirmations
+   */
+  setupKeyboardNavigation() {
+    // Only setup once globally
+    if (window._toastifyProKeyboardSetup) return;
+    window._toastifyProKeyboardSetup = true;
+    
+    document.addEventListener('keydown', (e) => {
+      // Escape key - dismiss toast or confirmation
+      if (e.key === 'Escape') {
+        // First check for active confirmation
+        if (globalActiveConfirmation && globalActiveConfirmation.element) {
+          const loadingBtn = globalActiveConfirmation.element.querySelector('.toast-btn-confirm.loading');
+          if (!loadingBtn) {
+            globalActiveConfirmation.close();
+          }
+          return;
+        }
+        
+        // Otherwise dismiss the most recent toast
+        const containers = document.querySelectorAll('.toastify-pro-container');
+        containers.forEach(container => {
+          const toasts = container.querySelectorAll('.toastify-pro:not(.confirmation)');
+          if (toasts.length > 0) {
+            const lastToast = toasts[toasts.length - 1];
+            if (lastToast && lastToast._toastInstance) {
+              lastToast._toastInstance.removeToast(lastToast);
+            }
+          }
+        });
+      }
+    });
   }
 
   /**
@@ -479,6 +535,7 @@ class ToastifyPro {
       transition: all 0.2s ease;
       flex-shrink: 0;
       width: 32px;
+      border: none;
       height: 32px;
       display: flex;
       align-items: center;
@@ -854,6 +911,117 @@ class ToastifyPro {
     .toastify-pro-overlay.show {
       opacity: 1;
     }
+    
+    /* Action Button Styles */
+    .toastify-pro .toast-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.2);
+      color: inherit;
+      backdrop-filter: blur(10px);
+    }
+    
+    .toastify-pro .toast-action:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .toastify-pro .toast-action:active {
+      transform: translateY(0);
+    }
+    
+    .toastify-pro.light .toast-action {
+      background: rgba(15, 23, 42, 0.1);
+    }
+    
+    .toastify-pro.light .toast-action:hover {
+      background: rgba(15, 23, 42, 0.15);
+    }
+    
+    /* Paused state - pause progress bar */
+    .toastify-pro.paused::after {
+      animation-play-state: paused;
+    }
+    
+    /* Focus styles for accessibility */
+    .toastify-pro .close-btn:focus,
+    .toastify-pro .toast-action:focus,
+    .toast-btn:focus {
+      outline: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    
+    .toastify-pro.light .close-btn:focus,
+    .toastify-pro.light .toast-action:focus {
+      outline-color: 1px solid rgba(15, 23, 42, 0.5);
+    }
+    
+    /* Screen reader only class */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .toastify-pro {
+        transition: opacity 0.3s ease;
+        transform: none !important;
+      }
+      
+      .toastify-pro.show {
+        animation: none !important;
+        opacity: 1;
+        transform: none !important;
+      }
+      
+      .toastify-pro .toast-icon {
+        animation: none !important;
+      }
+      
+      .toastify-pro::before {
+        animation: none !important;
+      }
+      
+      .toastify-pro::after {
+        animation: progress var(--duration, 5s) linear !important;
+      }
+      
+      .toastify-pro-overlay {
+        transition: opacity 0.2s ease;
+      }
+      
+      .toast-btn::after {
+        display: none;
+      }
+      
+      .toast-btn:hover {
+        transform: none;
+      }
+      
+      .toastify-pro.confirmation .conf-close-btn:hover {
+        transform: scale(1.05);
+      }
+      
+      .btn-spinner svg {
+        animation: spin 1.5s linear infinite !important;
+      }
+    }
   `;
       document.head.appendChild(style);
     } catch (error) {
@@ -870,6 +1038,9 @@ class ToastifyPro {
    * @param {number} opts.timeout - Override default timeout
    * @param {boolean} opts.allowClose - Override close button setting
    * @param {number} opts.maxLength - Override max message length
+   * @param {Object} opts.action - Action button configuration { label, onClick }
+   * @param {boolean} opts.pauseOnHover - Pause timeout on hover
+   * @param {string} opts.ariaLive - ARIA live region type ('polite' or 'assertive')
    */
   show(message, type = "dark", opts = {}) {
     // Input validation
@@ -899,9 +1070,29 @@ class ToastifyPro {
     const options = { ...this.defaultOptions, ...opts };
 
     try {
+      // Queue management - remove oldest toasts if limit exceeded
+      if (options.maxToasts > 0 && this.activeToasts.length >= options.maxToasts) {
+        const toastsToRemove = this.activeToasts.length - options.maxToasts + 1;
+        for (let i = 0; i < toastsToRemove; i++) {
+          const oldestToast = this.activeToasts.shift();
+          if (oldestToast && oldestToast.element) {
+            this.removeToast(oldestToast.element);
+          }
+        }
+      }
+      
       // Create toast element
       const toast = document.createElement("div");
       toast.className = `toastify-pro ${type}`;
+      
+      // Store reference to this instance for keyboard navigation
+      toast._toastInstance = this;
+      
+      // ARIA accessibility attributes
+      const ariaLive = type === 'error' || type === 'warning' ? 'assertive' : (options.ariaLive || 'polite');
+      toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+      toast.setAttribute('aria-live', ariaLive);
+      toast.setAttribute('aria-atomic', 'true');
       
       // Set duration for progress bar animation
       if (options.timeout > 0) {
@@ -911,6 +1102,7 @@ class ToastifyPro {
       // Create icon wrapper
       const iconWrapper = document.createElement("div");
       iconWrapper.className = "toast-icon";
+      iconWrapper.setAttribute('aria-hidden', 'true');
       iconWrapper.innerHTML = this.getIconSVG(type);
       toast.appendChild(iconWrapper);
 
@@ -932,20 +1124,50 @@ class ToastifyPro {
         contentWrapper.appendChild(descriptionElement);
       }
       
+      // Action button support
+      if (options.action && typeof options.action === 'object') {
+        const actionBtn = document.createElement("button");
+        actionBtn.className = "toast-action";
+        actionBtn.textContent = options.action.label || 'Action';
+        actionBtn.setAttribute('type', 'button');
+        if (typeof options.action.onClick === 'function') {
+          actionBtn.onclick = (e) => {
+            e.stopPropagation();
+            options.action.onClick({ close: () => this.removeToast(toast), event: e });
+          };
+        }
+        contentWrapper.appendChild(actionBtn);
+      }
+      
       toast.appendChild(contentWrapper);
 
       // Add close button if enabled
       if (options.allowClose) {
-        const closeBtn = document.createElement("span");
+        const closeBtn = document.createElement("button");
         closeBtn.className = "close-btn";
         closeBtn.innerHTML = "&times;";
+        closeBtn.setAttribute('type', 'button');
         closeBtn.setAttribute('aria-label', 'Close notification');
         closeBtn.onclick = () => this.removeToast(toast);
         toast.appendChild(closeBtn);
       }
 
-      // Add toast to container
-      this.container.appendChild(toast);
+      // Add toast to container (respect newestOnTop setting)
+      if (options.newestOnTop && this.container.firstChild) {
+        this.container.insertBefore(toast, this.container.firstChild);
+      } else {
+        this.container.appendChild(toast);
+      }
+      
+      // Track toast for queue management
+      const toastData = {
+        element: toast,
+        timeout: null,
+        remainingTime: options.timeout,
+        startTime: null,
+        isPaused: false
+      };
+      this.activeToasts.push(toastData);
 
       // Apple AirDrop-style entrance animation
       setTimeout(() => {
@@ -957,14 +1179,88 @@ class ToastifyPro {
         }
       }, 10);
 
-      // Auto-remove after timeout
-      if (options.timeout > 0) {
-        setTimeout(() => this.removeToast(toast), options.timeout);
+      // Pause on hover functionality
+      if (options.pauseOnHover && options.timeout > 0) {
+        toast.addEventListener('mouseenter', () => {
+          if (toastData.timeout) {
+            clearTimeout(toastData.timeout);
+            toastData.isPaused = true;
+            toastData.remainingTime -= (Date.now() - toastData.startTime);
+            toast.classList.add('paused');
+          }
+        });
+        
+        toast.addEventListener('mouseleave', () => {
+          if (toastData.isPaused && toastData.remainingTime > 0) {
+            toastData.isPaused = false;
+            toastData.startTime = Date.now();
+            toast.classList.remove('paused');
+            // Update CSS variable for remaining progress
+            toast.style.setProperty('--duration', `${toastData.remainingTime}ms`);
+            // Restart the progress animation
+            const afterElement = toast.querySelector('::after');
+            toast.style.animation = 'none';
+            void toast.offsetHeight; // Force reflow
+            toast.style.animation = '';
+            
+            toastData.timeout = setTimeout(() => this.removeToast(toast), toastData.remainingTime);
+          }
+        });
       }
 
-      return toast; // Return element for potential future manipulation
+      // Auto-remove after timeout
+      if (options.timeout > 0) {
+        toastData.startTime = Date.now();
+        toastData.timeout = setTimeout(() => this.removeToast(toast), options.timeout);
+      }
+
+      // Return toast control object
+      return {
+        element: toast,
+        dismiss: () => this.removeToast(toast),
+        update: (newMessage, newOpts) => this.updateToast(toast, newMessage, newOpts)
+      };
     } catch (error) {
       console.error('ToastifyPro: Failed to create toast:', error);
+    }
+  }
+  
+  /**
+   * Updates an existing toast's content
+   * @param {HTMLElement} toast - Toast element to update
+   * @param {string} message - New message text
+   * @param {Object} opts - Options to update
+   */
+  updateToast(toast, message, opts = {}) {
+    if (!toast || !toast.parentNode) return;
+    
+    const messageEl = toast.querySelector('.toast-message');
+    const descEl = toast.querySelector('.toast-description');
+    
+    if (message && messageEl) {
+      messageEl.textContent = message;
+    }
+    
+    if (opts.description && descEl) {
+      descEl.textContent = opts.description;
+    } else if (opts.description) {
+      const descriptionElement = document.createElement("div");
+      descriptionElement.className = "toast-description";
+      descriptionElement.textContent = opts.description;
+      toast.querySelector('.toast-content')?.appendChild(descriptionElement);
+    }
+    
+    // Update type/style if provided
+    if (opts.type) {
+      const validTypes = ['success', 'error', 'info', 'warning', 'dark', 'light'];
+      if (validTypes.includes(opts.type)) {
+        validTypes.forEach(t => toast.classList.remove(t));
+        toast.classList.add(opts.type);
+        const iconWrapper = toast.querySelector('.toast-icon');
+        if (iconWrapper) {
+          iconWrapper.innerHTML = this.getIconSVG(opts.type);
+        }
+      }
     }
   }
 
@@ -979,6 +1275,16 @@ class ToastifyPro {
     }
 
     try {
+      // Remove from active toasts tracking
+      const toastIndex = this.activeToasts.findIndex(t => t.element === toast);
+      if (toastIndex > -1) {
+        const toastData = this.activeToasts[toastIndex];
+        if (toastData.timeout) {
+          clearTimeout(toastData.timeout);
+        }
+        this.activeToasts.splice(toastIndex, 1);
+      }
+      
       // Detect position to choose the right swipe direction
       const container = toast.parentNode;
       const position = container.className.split(' ')[1]; // get position class
@@ -1020,6 +1326,33 @@ class ToastifyPro {
         toast.remove();
       }
     }
+  }
+  
+  /**
+   * Dismisses all active toasts
+   * @param {string} type - Optional: only dismiss toasts of this type
+   */
+  dismissAll(type = null) {
+    const toastsCopy = [...this.activeToasts];
+    toastsCopy.forEach(toastData => {
+      if (toastData.element) {
+        if (type) {
+          if (toastData.element.classList.contains(type)) {
+            this.removeToast(toastData.element);
+          }
+        } else {
+          this.removeToast(toastData.element);
+        }
+      }
+    });
+  }
+  
+  /**
+   * Gets the count of active toasts
+   * @returns {number} Number of active toasts
+   */
+  getActiveCount() {
+    return this.activeToasts.length;
   }
 
   /**
@@ -1195,6 +1528,14 @@ class ToastifyPro {
       const toast = document.createElement("div");
       toast.className = `toastify-pro custom${options.customTextLight ? ' light-text' : ''}`;
       
+      // Store reference to this instance
+      toast._toastInstance = this;
+      
+      // ARIA accessibility attributes
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', options.ariaLive || 'polite');
+      toast.setAttribute('aria-atomic', 'true');
+      
       // Apply custom gradient
       if (options.customGradient) {
         toast.style.background = options.customGradient;
@@ -1207,6 +1548,7 @@ class ToastifyPro {
       // Create icon wrapper
       const iconWrapper = document.createElement("div");
       iconWrapper.className = "toast-icon";
+      iconWrapper.setAttribute('aria-hidden', 'true');
       iconWrapper.innerHTML = this.getIconSVG('success'); // Use success icon for custom
       toast.appendChild(iconWrapper);
 
@@ -1229,15 +1571,53 @@ class ToastifyPro {
       toast.appendChild(contentWrapper);
 
       if (options.allowClose) {
-        const closeBtn = document.createElement("span");
+        const closeBtn = document.createElement("button");
         closeBtn.className = "close-btn";
         closeBtn.innerHTML = "&times;";
+        closeBtn.setAttribute('type', 'button');
         closeBtn.setAttribute('aria-label', 'Close notification');
         closeBtn.onclick = () => this.removeToast(toast);
         toast.appendChild(closeBtn);
       }
 
-      this.container.appendChild(toast);
+      // Add toast to container (respect newestOnTop setting)
+      if (options.newestOnTop && this.container.firstChild) {
+        this.container.insertBefore(toast, this.container.firstChild);
+      } else {
+        this.container.appendChild(toast);
+      }
+      
+      // Track toast for queue management
+      const toastData = {
+        element: toast,
+        timeout: null,
+        remainingTime: options.timeout,
+        startTime: null,
+        isPaused: false
+      };
+      this.activeToasts.push(toastData);
+
+      // Pause on hover functionality
+      if (options.pauseOnHover && options.timeout > 0) {
+        toast.addEventListener('mouseenter', () => {
+          if (toastData.timeout) {
+            clearTimeout(toastData.timeout);
+            toastData.isPaused = true;
+            toastData.remainingTime -= (Date.now() - toastData.startTime);
+            toast.classList.add('paused');
+          }
+        });
+        
+        toast.addEventListener('mouseleave', () => {
+          if (toastData.isPaused && toastData.remainingTime > 0) {
+            toastData.isPaused = false;
+            toastData.startTime = Date.now();
+            toast.classList.remove('paused');
+            toast.style.setProperty('--duration', `${toastData.remainingTime}ms`);
+            toastData.timeout = setTimeout(() => this.removeToast(toast), toastData.remainingTime);
+          }
+        });
+      }
 
       setTimeout(() => {
         toast.classList.add("show");
@@ -1248,10 +1628,15 @@ class ToastifyPro {
       }, 10);
 
       if (options.timeout > 0) {
-        setTimeout(() => this.removeToast(toast), options.timeout);
+        toastData.startTime = Date.now();
+        toastData.timeout = setTimeout(() => this.removeToast(toast), options.timeout);
       }
 
-      return toast;
+      return {
+        element: toast,
+        dismiss: () => this.removeToast(toast),
+        update: (newMessage, newOpts) => this.updateToast(toast, newMessage, newOpts)
+      };
     } catch (error) {
       console.error('ToastifyPro: Failed to create custom toast:', error);
     }
@@ -1561,9 +1946,10 @@ class ToastifyPro {
       }
 
       // Create close button for confirmation
-      const closeBtn = document.createElement("span");
+      const closeBtn = document.createElement("button");
       closeBtn.className = "conf-close-btn";
       closeBtn.innerHTML = "&times;";
+      closeBtn.setAttribute('type', 'button');
       closeBtn.setAttribute('aria-label', 'Cancel confirmation');
       closeBtn.onclick = () => {
         if (!isLoading) {
@@ -1579,6 +1965,7 @@ class ToastifyPro {
       // Create icon wrapper
       const iconWrapper = document.createElement("div");
       iconWrapper.className = "toast-icon";
+      iconWrapper.setAttribute('aria-hidden', 'true');
       iconWrapper.innerHTML = this.getIconSVG('info'); // Default to info icon
       if (confirmOptions.primaryColor) {
         iconWrapper.style.color = textColor;
@@ -1599,8 +1986,9 @@ class ToastifyPro {
       contentWrapper.appendChild(messageElement);
       
       // Optional description
+      let descriptionElement = null;
       if (description) {
-        const descriptionElement = document.createElement("div");
+        descriptionElement = document.createElement("div");
         descriptionElement.className = "toast-description";
         descriptionElement.textContent = description.substring(0, this.defaultOptions.maxLength * 2);
         if (confirmOptions.primaryColor) {
@@ -1618,6 +2006,7 @@ class ToastifyPro {
       // Cancel button
       const cancelBtn = document.createElement("button");
       cancelBtn.className = "toast-btn toast-btn-cancel";
+      cancelBtn.setAttribute('type', 'button');
       cancelBtn.textContent = confirmOptions.cancelText;
       cancelBtn.onclick = () => {
         if (!isLoading) {
@@ -1639,8 +2028,9 @@ class ToastifyPro {
       // Confirm button
       const confirmBtn = document.createElement("button");
       confirmBtn.className = `toast-btn toast-btn-confirm`;
+      confirmBtn.setAttribute('type', 'button');
 
-            // Create text wrapper
+      // Create text wrapper
       const textWrapper = document.createElement("span");
       textWrapper.className = "btn-text";
       textWrapper.textContent = confirmOptions.confirmText;
@@ -1707,6 +2097,53 @@ class ToastifyPro {
         setLoading(true);
       }
 
+      // ARIA accessibility for confirmation dialog
+      toast.setAttribute('role', 'alertdialog');
+      toast.setAttribute('aria-modal', 'true');
+      toast.setAttribute('aria-labelledby', 'toast-conf-title');
+      if (description) {
+        toast.setAttribute('aria-describedby', 'toast-conf-desc');
+      }
+      messageElement.id = 'toast-conf-title';
+      if (description && descriptionElement) {
+        descriptionElement.id = 'toast-conf-desc';
+      }
+      
+      // Store previously focused element for restoration
+      const previouslyFocused = document.activeElement;
+      
+      // Focus trap for confirmation dialog
+      const focusableElements = [cancelBtn, confirmBtn, closeBtn].filter(Boolean);
+      let currentFocusIndex = 0;
+      
+      const handleTabKey = (e) => {
+        if (e.key === 'Tab' && toastElement && toastElement.parentNode) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            currentFocusIndex = (currentFocusIndex - 1 + focusableElements.length) % focusableElements.length;
+          } else {
+            currentFocusIndex = (currentFocusIndex + 1) % focusableElements.length;
+          }
+          focusableElements[currentFocusIndex]?.focus();
+        }
+      };
+      
+      document.addEventListener('keydown', handleTabKey);
+      
+      // Store cleanup function
+      const originalClose = closeConfirmation;
+      const cleanupAndClose = () => {
+        document.removeEventListener('keydown', handleTabKey);
+        // Restore focus to previously focused element
+        if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+          setTimeout(() => previouslyFocused.focus(), 100);
+        }
+        originalClose();
+      };
+      
+      // Update control object with enhanced close
+      controlObject.close = cleanupAndClose;
+
       // Entrance animation
       setTimeout(() => {
         toast.classList.add("show");
@@ -1714,6 +2151,11 @@ class ToastifyPro {
         if (icon) {
           icon.style.animation = 'iconBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         }
+        
+        // Focus the confirm button after animation
+        setTimeout(() => {
+          confirmBtn.focus();
+        }, 100);
       }, 10);
 
       // Return control object with toast element and control functions
