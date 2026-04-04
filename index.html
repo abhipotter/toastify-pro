@@ -35,6 +35,9 @@
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   
+  <!-- Framer Motion -->
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@11.0.8/dist/framer-motion.js"></script>
+  
   <!-- Toastify Pro -->
   <script src="src/toastify-pro.js"></script>
 
@@ -82,6 +85,55 @@
       background: #f8fafc;
       -webkit-font-smoothing: antialiased;
     }
+
+    /* ========== Animations ========== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
 
     /* ========== Navigation ========== */
     .nav {
@@ -152,17 +204,19 @@
       text-decoration: none;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .btn-primary {
       background: var(--primary);
       color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .btn-primary:hover {
       background: var(--primary-dark);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
     }
 
     .btn-outline {
@@ -288,11 +342,25 @@
       border-radius: var(--radius);
       padding: 20px;
       text-align: left;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
 
     .feature-card-icon {
       font-size: 1.5rem;
       margin-bottom: 8px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .feature-card:hover .feature-card-icon {
+      transform: scale(1.2) rotate(5deg);
     }
 
     .feature-card h3 {
@@ -1281,7 +1349,7 @@ toast.<span class="token-function">conf</span>(<span class="token-string">'Conti
     function showAsyncConfirm() {
       updateToast();
       toast.conf('Submit to server?', {
-        description: 'This will send your data to our servers.',
+        description: 'This will send your data to our servers. Make sure you have a stable internet connection.',
         confirmText: 'Submit',
         onConfirm: async ({ setLoading, close }) => {
           setLoading(true);
@@ -1296,7 +1364,7 @@ toast.<span class="token-function">conf</span>(<span class="token-string">'Conti
     // Show input prompt
     function showInputPrompt() {
       updateToast();
-      toast.input('What is your name?', {
+      toast.input('lets get started, What is your name?', {
         placeholder: 'Enter your name...',
         submitText: 'Greet Me',
         onSubmit: (value) => {
@@ -1368,6 +1436,106 @@ toast.<span class="token-function">conf</span>(<span class="token-string">'Conti
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+      });
+    });
+
+    // Initial page load animations with Framer Motion
+    window.addEventListener('load', function() {
+      // Add stagger animations to elements
+      const nav = document.querySelector('.nav');
+      const heroContent = document.querySelector('.hero-content');
+      const heroButtons = document.querySelector('.hero-buttons');
+      const featureCards = document.querySelectorAll('.feature-card');
+      
+      // Animate navigation
+      if (nav && typeof Motion !== 'undefined') {
+        nav.style.opacity = '0';
+        nav.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+          nav.style.transition = 'all 0.6s ease';
+          nav.style.opacity = '1';
+          nav.style.transform = 'translateY(0)';
+        }, 100);
+      }
+
+      // Animate hero content
+      if (heroContent) {
+        const heroBadge = heroContent.querySelector('.hero-badge');
+        const heroH1 = heroContent.querySelector('h1');
+        const heroP = heroContent.querySelector('p');
+        
+        [heroBadge, heroH1, heroP, heroButtons].forEach((el, i) => {
+          if (el) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+              el.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+              el.style.opacity = '1';
+              el.style.transform = 'translateY(0)';
+            }, 200 + (i * 100));
+          }
+        });
+      }
+
+      // Animate feature cards
+      featureCards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 600 + (i * 80));
+      });
+
+      // Show welcome toast with gradient after animations
+      setTimeout(() => {
+        toast.custom('Welcome to Toastify Pro! 🎉', {
+          primaryColor: '#6366f1',
+          secondaryColor: '#8b5cf6',
+          description: 'Beautiful toast notifications with zero dependencies. Try the demo below!',
+          duration: 6000,
+          position: 'top-center',
+          closeButton: true,
+          progressBar: true
+        });
+      }, 1200);
+    });
+
+    // Scroll animations for sections
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '0';
+          entry.target.style.transform = 'translateY(30px)';
+          setTimeout(() => {
+            entry.target.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, 50);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    document.querySelectorAll('.section').forEach(section => {
+      observer.observe(section);
+    });
+
+    // Add hover animations to demo buttons
+    document.querySelectorAll('.demo-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        this.style.transform = 'translateY(-4px) scale(1.02)';
+      });
+      btn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
       });
     });
   </script>
