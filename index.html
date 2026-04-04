@@ -282,7 +282,7 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-size: clamp(2.5rem, 6vw, 3rem);
       font-weight: 700;
       letter-spacing: -0.03em;
       margin-bottom: 20px;
@@ -290,7 +290,7 @@
     }
 
     .hero p {
-      font-size: 1.2rem;
+      font-size: 1.125rem;
       opacity: 0.9;
       margin-bottom: 36px;
       max-width: 600px;
@@ -707,6 +707,488 @@
       display: block;
     }
 
+    /* ========== Interactive Playground ========== */
+    .playground {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-top: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .playground::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .playground-header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .playground-header h3 {
+      color: white;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .playground-header p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+    }
+
+    /* Playground Cards Grid */
+    .playground-cards {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .pg-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .pg-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .pg-card.featured {
+      border-color: rgba(99, 102, 241, 0.4);
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .pg-card-badge {
+      position: absolute;
+      top: -8px;
+      right: 16px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .pg-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .pg-card-icon {
+      font-size: 1.5rem;
+    }
+
+    .pg-card-header h4 {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .pg-card-desc {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .pg-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Playground Buttons */
+    .pg-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: all 0.2s;
+    }
+
+    .pg-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .pg-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .pg-btn.primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-color: transparent;
+    }
+
+    .pg-btn.primary:hover {
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .pg-btn.secondary {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .pg-btn.success { border-color: rgba(34, 197, 94, 0.5); color: #4ade80; }
+    .pg-btn.success:hover { background: rgba(34, 197, 94, 0.2); }
+    .pg-btn.error { border-color: rgba(239, 68, 68, 0.5); color: #f87171; }
+    .pg-btn.error:hover { background: rgba(239, 68, 68, 0.2); }
+    .pg-btn.warning { border-color: rgba(245, 158, 11, 0.5); color: #fbbf24; }
+    .pg-btn.warning:hover { background: rgba(245, 158, 11, 0.2); }
+    .pg-btn.info { border-color: rgba(59, 130, 246, 0.5); color: #60a5fa; }
+    .pg-btn.info:hover { background: rgba(59, 130, 246, 0.2); }
+    .pg-btn.dark { border-color: rgba(75, 85, 99, 0.5); color: #d1d5db; }
+    .pg-btn.dark:hover { background: rgba(75, 85, 99, 0.3); }
+    .pg-btn.light { border-color: rgba(255, 255, 255, 0.5); color: #f9fafb; }
+    .pg-btn.light:hover { background: rgba(255, 255, 255, 0.25); }
+
+    /* Color Buttons */
+    .pg-colors {
+      gap: 10px;
+    }
+
+    .pg-color-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pg-color-btn:hover {
+      transform: scale(1.15);
+      border-color: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Position Grid */
+    .pg-position-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      max-width: 150px;
+    }
+
+    .pg-position-grid .pg-pos-btn:nth-child(4) {
+      grid-column: 2;
+    }
+    .pg-position-grid .pg-pos-btn:nth-child(5) {
+      grid-column: 1;
+    }
+
+    .pg-pos-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pg-pos-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: scale(1.1);
+    }
+
+    /* Preview Code */
+    .pg-preview-code {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Quick Try Section */
+    .pg-quick-try {
+      position: relative;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pg-quick-input {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .pg-quick-input input[type="text"] {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .pg-quick-input input[type="text"]::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .pg-quick-input button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .pg-quick-input button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Custom Dropdown */
+    .custom-select {
+      position: relative;
+      min-width: 160px;
+    }
+
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .custom-select-trigger:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .custom-select.open .custom-select-trigger {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.2);
+    }
+
+    .custom-select-trigger svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s;
+    }
+
+    .custom-select.open .custom-select-trigger svg {
+      transform: rotate(180deg);
+    }
+
+    .custom-select-options {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: var(--gray-800);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s;
+      z-index: 100;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .custom-select.open .custom-select-options {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .custom-select-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .custom-select-option:hover {
+      background: rgba(99, 102, 241, 0.3);
+    }
+
+    .custom-select-option.selected {
+      background: rgba(99, 102, 241, 0.4);
+      color: white;
+    }
+
+    .custom-select-option .option-icon {
+      font-size: 1.1rem;
+    }
+
+    /* Loading Overlay */
+    .pg-loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .pg-loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .pg-loading-content {
+      background: white;
+      padding: 32px 48px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pg-loading-overlay.active .pg-loading-content {
+      transform: scale(1);
+    }
+
+    .pg-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--gray-200);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .pg-loading-content p {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Stats Counter Animation */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+      padding: 32px;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--gray-50);
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .playground-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .pg-quick-input {
+        flex-direction: column;
+      }
+
+      .pg-quick-input input[type="text"],
+      .pg-quick-input select,
+      .pg-quick-input button {
+        width: 100%;
+      }
+
+      .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     /* ========== Footer ========== */
     .footer {
       background: var(--gray-900);
@@ -807,11 +1289,12 @@
 <body>
   <!-- Navigation -->
   <nav class="nav">
-    <a href="#" class="nav-brand">
+    <a href="#hero" class="nav-brand">
       🍞 <span>Toastify Pro</span>
     </a>
     <div class="nav-links">
       <a href="#demo">Demo</a>
+      <a href="#playground">Playground</a>
       <a href="#install">Installation</a>
       <a href="#api">API</a>
       <a href="#examples">Examples</a>
@@ -827,7 +1310,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section id="hero" class="hero">
     <div class="hero-content">
       <div class="hero-badge">
         ✨ v1.7.0 — Now with Input Prompts
@@ -873,6 +1356,16 @@
         <div class="feature-card-icon">📝</div>
         <h3>Input Prompts</h3>
         <p>With validation</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">🎯</div>
+        <h3>Action Buttons</h3>
+        <p>Clickable CTAs</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">⏳</div>
+        <h3>Loading States</h3>
+        <p>Async callbacks</p>
       </div>
     </div>
   </section>
@@ -971,6 +1464,215 @@
               With Action
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="playground" id="playground">
+        <div class="playground-header">
+          <h3>🎮 Interactive Playground</h3>
+          <p>Click any card below to try it instantly</p>
+        </div>
+
+        <!-- Feature Cards Grid -->
+        <div class="playground-cards">
+          
+          <!-- Basic Toasts -->
+          <div class="pg-card">
+            <div class="pg-card-header">
+              <span class="pg-card-icon">🍞</span>
+              <h4>Basic Toasts</h4>
+            </div>
+            <p class="pg-card-desc">Simple notifications in 6 beautiful themes</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn success" onclick="playgroundToast('success', 'Success! Task completed ✓')">Success</button>
+              <button class="pg-btn error" onclick="playgroundToast('error', 'Error! Something went wrong')">Error</button>
+              <button class="pg-btn warning" onclick="playgroundToast('warning', 'Warning! Check your input')">Warning</button>
+              <button class="pg-btn info" onclick="playgroundToast('info', 'Info: New update available')">Info</button>
+              <button class="pg-btn dark" onclick="playgroundToast('dark', 'Dark theme toast')">Dark</button>
+              <button class="pg-btn light" onclick="playgroundToast('light', 'Light theme toast')">Light</button>
+            </div>
+          </div>
+
+          <!-- With Description -->
+          <!-- <div class="pg-card">
+            <div class="pg-card-header">
+              <span class="pg-card-icon">📝</span>
+              <h4>With Description</h4>
+            </div>
+            <p class="pg-card-desc">Add more context with a subtitle</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn primary" onclick="playgroundDesc()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Try It
+              </button>
+            </div>
+            <div class="pg-preview-code">toast.success('File uploaded', { description: '...' });</div>
+          </div> -->
+          <!-- Positions -->
+          
+          <div class="pg-card">
+            <div class="pg-card-header">
+              <span class="pg-card-icon">📍</span>
+              <h4>7 Positions</h4>
+            </div>
+            <p class="pg-card-desc">Show toasts anywhere on screen</p>
+            <div class="pg-position-grid">
+              <button class="pg-pos-btn" onclick="playgroundPosition('top-left')">↖</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('top-center')">↑</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('top-right')">↗</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('center')">⬤</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('bottom-left')">↙</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('bottom-center')">↓</button>
+              <button class="pg-pos-btn" onclick="playgroundPosition('bottom-right')">↘</button>
+            </div>
+          </div>
+
+          <!-- Confirmation Dialog -->
+          <div class="pg-card featured">
+            <div class="pg-card-badge">Popular</div>
+            <div class="pg-card-header">
+              <span class="pg-card-icon">✅</span>
+              <h4>Confirmation</h4>
+            </div>
+            <p class="pg-card-desc">Ask users before important actions</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn primary" onclick="playgroundConfirm()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Delete Item?
+              </button>
+            </div>
+            <div class="pg-preview-code">toast.conf('Delete?', callback);</div>
+          </div>
+
+          <!-- Async Loading -->
+          <!-- <div class="pg-card featured">
+            <div class="pg-card-badge">⚡ Async</div>
+            <div class="pg-card-header">
+              <span class="pg-card-icon">⏳</span>
+              <h4>Loading State</h4>
+            </div>
+            <p class="pg-card-desc">Show spinner during API calls</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn primary" onclick="playgroundAsync()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                Submit Form
+              </button>
+            </div>
+            <div class="pg-preview-code">onConfirm: async ({ setLoading }) => ...</div>
+          </div> -->
+
+          <!-- Input Prompt -->
+          <div class="pg-card featured">
+            <div class="pg-card-badge">New</div>
+            <div class="pg-card-header">
+              <span class="pg-card-icon">⌨️</span>
+              <h4>Input Prompt</h4>
+            </div>
+            <p class="pg-card-desc">Collect user input with validation</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn primary" onclick="playgroundInput()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Ask Name
+              </button>
+              <button class="pg-btn secondary" onclick="playgroundEmail()">
+                Email Input
+              </button>
+            </div>
+            <div class="pg-preview-code">toast.input('Your name?', callback);</div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="pg-card">
+            <div class="pg-card-header">
+              <span class="pg-card-icon">👆</span>
+              <h4>Action Button</h4>
+            </div>
+            <p class="pg-card-desc">Add clickable actions to toasts</p>
+            <div class="pg-card-actions">
+              <button class="pg-btn primary" onclick="playgroundAction()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Update Available
+              </button>
+            </div>
+            <div class="pg-preview-code">action: { label: 'Update', onClick: ... }</div>
+          </div>
+
+          <!-- Custom Colors -->
+          <div class="pg-card">
+            <div class="pg-card-header">
+              <span class="pg-card-icon">🎨</span>
+              <h4>Custom Colors</h4>
+            </div>
+            <p class="pg-card-desc">Create beautiful gradient toasts</p>
+            <div class="pg-card-actions pg-colors">
+              <button class="pg-color-btn" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);" onclick="playgroundColor('#6366f1', '#8b5cf6', 'Purple magic!')"></button>
+              <button class="pg-color-btn" style="background: linear-gradient(135deg, #ec4899, #f43f5e);" onclick="playgroundColor('#ec4899', '#f43f5e', 'Pink vibes!')"></button>
+              <button class="pg-color-btn" style="background: linear-gradient(135deg, #14b8a6, #22c55e);" onclick="playgroundColor('#14b8a6', '#22c55e', 'Fresh green!')"></button>
+              <button class="pg-color-btn" style="background: linear-gradient(135deg, #f59e0b, #ef4444);" onclick="playgroundColor('#f59e0b', '#ef4444', 'Sunset orange!')"></button>
+              <button class="pg-color-btn" style="background: linear-gradient(135deg, #3b82f6, #06b6d4);" onclick="playgroundColor('#3b82f6', '#06b6d4', 'Ocean blue!')"></button>
+            </div>
+            <div class="pg-preview-code">primaryColor: '#6366f1', secondaryColor: '...'</div>
+          </div>
+
+        </div>
+
+        <!-- Quick Try Section -->
+        <!-- <div class="pg-quick-try">
+          <div class="pg-quick-input">
+            <input type="text" id="quickMessage" placeholder="Type your message and press Enter..." value="Hello World! 🚀">
+            
+            <div class="custom-select" id="quickTypeSelect">
+              <div class="custom-select-trigger" onclick="toggleDropdown('quickTypeSelect')">
+                <span><span class="option-icon">ℹ️</span> Info</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="custom-select-options">
+                <div class="custom-select-option" data-value="success" onclick="selectOption('quickTypeSelect', 'success', '✅', 'Success')">
+                  <span class="option-icon">✅</span> Success
+                </div>
+                <div class="custom-select-option" data-value="error" onclick="selectOption('quickTypeSelect', 'error', '❌', 'Error')">
+                  <span class="option-icon">❌</span> Error
+                </div>
+                <div class="custom-select-option" data-value="warning" onclick="selectOption('quickTypeSelect', 'warning', '⚠️', 'Warning')">
+                  <span class="option-icon">⚠️</span> Warning
+                </div>
+                <div class="custom-select-option selected" data-value="info" onclick="selectOption('quickTypeSelect', 'info', 'ℹ️', 'Info')">
+                  <span class="option-icon">ℹ️</span> Info
+                </div>
+                <div class="custom-select-option" data-value="dark" onclick="selectOption('quickTypeSelect', 'dark', '🌙', 'Dark')">
+                  <span class="option-icon">🌙</span> Dark
+                </div>
+                <div class="custom-select-option" data-value="light" onclick="selectOption('quickTypeSelect', 'light', '☀️', 'Light')">
+                  <span class="option-icon">☀️</span> Light
+                </div>
+              </div>
+            </div>
+            
+            <button onclick="fireQuickToast()">
+              Fire! 🔥
+            </button>
+          </div>
+        </div> -->
+      </div>
+
+      <!-- Stats Section -->
+      <div class="stats-section">
+        <div class="stat-card">
+          <div class="stat-number" data-count="2">0</div>
+          <div class="stat-label">KB Minified</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-count="0">0</div>
+          <div class="stat-label">Dependencies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-count="7">0</div>
+          <div class="stat-label">Positions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-count="6">0</div>
+          <div class="stat-label">Themes</div>
         </div>
       </div>
     </section>
@@ -1538,6 +2240,214 @@ toast.<span class="token-function">conf</span>(<span class="token-string">'Conti
         this.style.transform = 'translateY(0) scale(1)';
       });
     });
+
+    // ========== PLAYGROUND FUNCTIONS ==========
+
+    // Basic toast from playground
+    function playgroundToast(type, message) {
+      toast[type](message, { position: 'bottom-center' });
+    }
+
+    // Toast with description
+    function playgroundDesc() {
+      toast.success('File uploaded successfully! 📁', {
+        description: 'Your document has been saved to the cloud and is ready to share.',
+        position: 'bottom-center'
+      });
+    }
+
+    // Confirmation dialog with async loading on confirm
+    function playgroundConfirm() {
+      toast.conf('Delete this item?', {
+        description: 'This action cannot be undone. The item will be permanently removed.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        position: 'center',
+        onConfirm: async ({ setLoading, close }) => {
+          setLoading(true);
+          await new Promise(r => setTimeout(r, 1500));
+          close();
+          toast.success('Item deleted! 🗑️');
+        },
+        onCancel: () => {
+          toast.info('Deletion cancelled');
+        }
+      });
+    }
+
+    // Async loading on submit
+    function playgroundAsync() {
+      toast.conf('Submit to server?', {
+        description: 'This will send your data for processing, it may take a few seconds. Please wait.',
+        confirmText: 'Submit',
+        position: 'center',
+        onConfirm: async ({ setLoading, close }) => {
+          setLoading(true);
+          await new Promise(r => setTimeout(r, 2000));
+          close();
+          toast.success('Submitted successfully! ✨');
+        }
+      });
+    }
+
+    // Input prompt with async loading on submit
+    function playgroundInput() {
+      toast.input('What is your name?', {
+        placeholder: 'Enter your name...',
+        submitText: 'Greet Me',
+        position: 'center',
+        onSubmit: async (value, { setLoading, close }) => {
+          setLoading(true);
+          await new Promise(r => setTimeout(r, 1500));
+          close();
+          toast.success(`Hello, ${value}! 👋`);
+        }
+      });
+    }
+
+    // Email input with validation and async loading
+    function playgroundEmail() {
+      toast.input('Enter your email', {
+        type: 'email',
+        placeholder: 'you@example.com',
+        submitText: 'Subscribe',
+        position: 'center',
+        validate: (val) => val.includes('@') || 'Please enter a valid email',
+        onSubmit: async (email, { setLoading, close }) => {
+          setLoading(true);
+          await new Promise(r => setTimeout(r, 1500));
+          close();
+          toast.success(`Subscribed: ${email} 📧`);
+        }
+      });
+    }
+
+    // Action button toast with async loading
+    function playgroundAction() {
+      toast.info('New update available! 🚀', {
+        description: 'Version 2.0 is ready to install',
+        position: 'bottom-center',
+        action: {
+          label: 'Update Now',
+          onClick: ({ close }) => {
+            close();
+            toast.success('Update started!');
+          }
+        }
+      });
+    }
+
+    // Custom colors
+    function playgroundColor(primary, secondary, message) {
+      toast.custom(message, {
+        primaryColor: primary,
+        secondaryColor: secondary,
+        description: 'Beautiful custom gradient toast',
+        position: 'bottom-center'
+      });
+    }
+
+    // Position demo - shows toast at selected position
+    function playgroundPosition(position) {
+      const positionNames = {
+        'top-left': 'Top Left',
+        'top-center': 'Top Center',
+        'top-right': 'Top Right',
+        'center': 'Center',
+        'bottom-left': 'Bottom Left',
+        'bottom-center': 'Bottom Center',
+        'bottom-right': 'Bottom Right'
+      };
+      
+      const posToast = new ToastifyPro({ position: position });
+      posToast.info(`📍 ${positionNames[position]}`, {
+        description: 'Toast appears at this position',
+        duration: 2500
+      });
+    }
+
+    // ========== CUSTOM DROPDOWN FUNCTIONS ==========
+
+    let selectedType = 'info';
+
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      const isOpen = dropdown.classList.contains('open');
+      
+      document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('open'));
+      
+      if (!isOpen) {
+        dropdown.classList.add('open');
+      }
+    }
+
+    function selectOption(dropdownId, value, icon, label) {
+      const dropdown = document.getElementById(dropdownId);
+      const trigger = dropdown.querySelector('.custom-select-trigger span');
+      
+      selectedType = value;
+      trigger.innerHTML = `<span class="option-icon">${icon}</span> ${label}`;
+      
+      dropdown.querySelectorAll('.custom-select-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.dataset.value === value) {
+          opt.classList.add('selected');
+        }
+      });
+      
+      dropdown.classList.remove('open');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.custom-select')) {
+        document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('open'));
+      }
+    });
+
+    function fireQuickToast() {
+      const message = document.getElementById('quickMessage').value || 'Hello World! 🚀';
+      toast[selectedType](message, { position: 'bottom-center' });
+    }
+
+    document.getElementById('quickMessage')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') fireQuickToast();
+    });
+
+    // Animate stats on scroll
+    function animateStats() {
+      const stats = document.querySelectorAll('.stat-number');
+      stats.forEach(stat => {
+        const target = parseInt(stat.dataset.count);
+        const duration = 1500;
+        const increment = target / (duration / 16);
+        let current = 0;
+        
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            stat.textContent = target;
+            clearInterval(timer);
+          } else {
+            stat.textContent = Math.floor(current);
+          }
+        }, 16);
+      });
+    }
+
+    // Observe stats section
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStats();
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+      statsObserver.observe(statsSection);
+    }
   </script>
 </body>
 </html>
