@@ -75,5 +75,8 @@
   },
   "directories": {
     "example": "examples"
+  },
+  "overrides": {
+    "@jridgewell/sourcemap-codec": "1.5.0"
   }
 }
