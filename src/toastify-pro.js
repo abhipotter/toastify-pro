@@ -14,6 +14,7 @@
  * - Responsive design for mobile devices
  * - Framework agnostic (works with React, Vue, Angular, etc.)
  * - Confirmation dialogs with customizable buttons and callbacks
+ * - Input prompts with validation and async support
  * - Confirmation overlay with blur effect for focus
  * - Center position support for enhanced focus
  * - Independent positioning for confirmations
@@ -21,9 +22,10 @@
  * - Pause on hover functionality
  * - Queue management (maxToasts, newestOnTop)
  * - Full accessibility support (ARIA, keyboard navigation, reduced motion)
- * - Focus management for confirmation dialogs
+ * - Focus management for confirmation and input dialogs
+ * - Improved dismiss handling (no hover interference)
  * 
- * @version 1.6.0
+ * @version 1.7.0
  * @author ToastifyPro Team
  * @license MIT
  */
@@ -264,19 +266,19 @@ class ToastifyPro {
     @keyframes airdropPop {
       0% { 
         opacity: 0;
-        transform: scale(0.3) rotateY(-20deg); 
+        transform: scale(0.5) rotateY(-15deg) translateY(20px); 
       }
-      30% { 
-        opacity: 0.8;
-        transform: scale(1.1) rotateY(10deg); 
+      50% { 
+        opacity: 0.95;
+        transform: scale(1.03) rotateY(5deg) translateY(-3px); 
       }
-      60% { 
+      75% { 
         opacity: 1;
-        transform: scale(0.98) rotateY(-3deg); 
+        transform: scale(0.99) rotateY(-1deg) translateY(1px); 
       }
       100% { 
         opacity: 1;
-        transform: scale(1) rotateY(0deg); 
+        transform: scale(1) rotateY(0deg) translateY(0); 
       }
     }
     
@@ -285,13 +287,13 @@ class ToastifyPro {
         opacity: 1;
         transform: scale(1) translateY(0); 
       }
-      15% { 
+      12% { 
         opacity: 1;
-        transform: scale(1.02) translateY(-8px); 
+        transform: scale(1.015) translateY(-6px); 
       }
       100% { 
         opacity: 0;
-        transform: scale(0.8) translateY(200px); 
+        transform: scale(0.85) translateY(150px); 
       }
     }
     
@@ -300,13 +302,13 @@ class ToastifyPro {
         opacity: 1;
         transform: scale(1) translateY(0); 
       }
-      15% { 
+      12% { 
         opacity: 1;
-        transform: scale(1.02) translateY(8px); 
+        transform: scale(1.015) translateY(6px); 
       }
       100% { 
         opacity: 0;
-        transform: scale(0.8) translateY(-200px); 
+        transform: scale(0.85) translateY(-150px); 
       }
     }
     
@@ -315,13 +317,13 @@ class ToastifyPro {
         opacity: 1;
         transform: scale(1) translateX(0); 
       }
-      15% { 
+      12% { 
         opacity: 1;
-        transform: scale(1.02) translateX(8px); 
+        transform: scale(1.015) translateX(6px); 
       }
       100% { 
         opacity: 0;
-        transform: scale(0.8) translateX(-300px); 
+        transform: scale(0.85) translateX(-250px); 
       }
     }
     
@@ -330,13 +332,13 @@ class ToastifyPro {
         opacity: 1;
         transform: scale(1) translateX(0); 
       }
-      15% { 
+      12% { 
         opacity: 1;
-        transform: scale(1.02) translateX(-8px); 
+        transform: scale(1.015) translateX(-6px); 
       }
       100% { 
         opacity: 0;
-        transform: scale(0.8) translateX(300px); 
+        transform: scale(0.85) translateX(250px); 
       }
     }
     
@@ -345,13 +347,13 @@ class ToastifyPro {
         opacity: 1;
         transform: scale(1) translateY(0); 
       }
-      15% { 
+      12% { 
         opacity: 1;
-        transform: scale(1.02) translateY(-5px); 
+        transform: scale(1.015) translateY(-4px); 
       }
       100% { 
         opacity: 0;
-        transform: scale(0.6) translateY(150px); 
+        transform: scale(0.7) translateY(120px); 
       }
     }
     
@@ -388,7 +390,7 @@ class ToastifyPro {
     .toastify-pro.show { 
       opacity: 1; 
       transform: scale(1);
-      animation: airdropPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: airdropPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     
     .toastify-pro.success { 
@@ -467,9 +469,9 @@ class ToastifyPro {
     }
     
     @keyframes iconBounce {
-      0% { transform: scale(0.2) rotate(-15deg); }
-      40% { transform: scale(1.2) rotate(8deg); }
-      70% { transform: scale(0.95) rotate(-3deg); }
+      0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+      70% { transform: scale(0.97) rotate(-2deg); }
       100% { transform: scale(1) rotate(0deg); }
     }
     
@@ -478,17 +480,22 @@ class ToastifyPro {
         transform: scale(1) rotate(0deg); 
         opacity: 1;
       }
-      20% { 
-        transform: scale(1.1) rotate(-10deg); 
-        opacity: 0.9;
+      25% { 
+        transform: scale(1.08) rotate(-8deg); 
+        opacity: 0.85;
       }
       100% { 
-        transform: scale(0.3) rotate(180deg); 
+        transform: scale(0.4) rotate(120deg); 
         opacity: 0;
       }
     }
     
     @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes spinFast {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
@@ -816,7 +823,7 @@ class ToastifyPro {
     .toast-btn-confirm .btn-spinner svg {
       width: 25px;
       height: 25px;
-      animation: spin 1s linear infinite;
+      animation: spinFast 0.5s linear infinite;
       color: currentColor;
     }
     
@@ -952,6 +959,11 @@ class ToastifyPro {
       animation-play-state: paused;
     }
     
+    /* Progress restart - used after hover to restart progress bar only */
+    .toastify-pro.progress-restart::after {
+      animation: none;
+    }
+    
     /* Focus styles for accessibility */
     .toastify-pro .close-btn:focus,
     .toastify-pro .toast-action:focus,
@@ -975,6 +987,240 @@ class ToastifyPro {
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
       border: 0;
+    }
+    
+    /* ===== INPUT TOAST STYLES ===== */
+    .toastify-pro.input-toast {
+      min-width: 340px;
+      max-width: 450px;
+      padding: 24px 24px 20px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    
+    .toastify-pro.input-toast .toast-input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+    
+    .toastify-pro.input-toast .toast-input-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .toastify-pro.input-toast .toast-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      color: inherit;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 450;
+      outline: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .toastify-pro.input-toast .toast-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+    }
+    
+    .toastify-pro.input-toast .toast-input:focus {
+      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 
+        inset 0 1px 2px rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(255, 255, 255, 0.08);
+    }
+    
+    .toastify-pro.input-toast .toast-input:hover:not(:focus) {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input {
+      border-color: rgba(15, 23, 42, 0.15);
+      background: rgba(15, 23, 42, 0.04);
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input::placeholder {
+      color: rgba(15, 23, 42, 0.45);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input:focus {
+      border-color: rgba(15, 23, 42, 0.35);
+      background: rgba(15, 23, 42, 0.06);
+      box-shadow: 
+        inset 0 1px 2px rgba(15, 23, 42, 0.06),
+        0 0 0 3px rgba(15, 23, 42, 0.06);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input:hover:not(:focus) {
+      border-color: rgba(15, 23, 42, 0.25);
+      background: rgba(15, 23, 42, 0.06);
+    }
+    
+    .toastify-pro.input-toast .toast-input-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    
+    .toastify-pro.input-toast .input-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 550;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1.5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .toastify-pro.input-toast .input-btn-cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .toastify-pro.input-toast .input-btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+      color: #1e293b;
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+      transform: translateY(-1px);
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .toastify-pro.input-toast.light .input-btn-cancel {
+      background: rgba(15, 23, 42, 0.06);
+      color: rgba(15, 23, 42, 0.85);
+      border-color: rgba(15, 23, 42, 0.15);
+    }
+    
+    .toastify-pro.input-toast.light .input-btn-cancel:hover {
+      background: rgba(15, 23, 42, 0.1);
+      border-color: rgba(15, 23, 42, 0.25);
+    }
+    
+    .toastify-pro.input-toast.light .input-btn-submit {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+      border-color: rgba(15, 23, 42, 0.3);
+    }
+    
+    .toastify-pro.input-toast.light .input-btn-submit:hover {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.25);
+    }
+    
+    /* Input toast loading state */
+    .toastify-pro.input-toast .input-btn-submit.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit .btn-spinner {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin-left: 6px;
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit .btn-spinner svg {
+      width: 16px;
+      height: 16px;
+      animation: spinFast 0.5s linear infinite;
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit.loading .btn-spinner {
+      display: inline-flex;
+    }
+    
+    .toastify-pro.input-toast .input-btn-submit.loading .btn-text {
+      opacity: 0.7;
+    }
+    
+    /* Input validation error state */
+    .toastify-pro.input-toast .toast-input.error {
+      border-color: rgba(239, 68, 68, 0.6);
+      background: rgba(239, 68, 68, 0.08);
+      animation: inputShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+    
+    .toastify-pro.input-toast .toast-input-error {
+      color: #f87171;
+      font-size: 12px;
+      font-weight: 450;
+      margin-top: -8px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 0.2s ease;
+    }
+    
+    .toastify-pro.input-toast .toast-input-error.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input.error {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.06);
+    }
+    
+    .toastify-pro.input-toast.light .toast-input-error {
+      color: #dc2626;
+    }
+    
+    @keyframes inputShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    
+    /* Hide progress bar for input toasts */
+    .toastify-pro.input-toast::after {
+      display: none;
+    }
+    
+    @media (max-width: 640px) {
+      .toastify-pro.input-toast {
+        min-width: 280px;
+        max-width: calc(100vw - 32px);
+      }
+      
+      .toastify-pro.input-toast .toast-input-actions {
+        flex-direction: column;
+      }
+      
+      .toastify-pro.input-toast .input-btn {
+        width: 100%;
+      }
     }
     
     /* Reduced motion support */
@@ -1019,7 +1265,7 @@ class ToastifyPro {
       }
       
       .btn-spinner svg {
-        animation: spin 1.5s linear infinite !important;
+        animation: spinFast 0.5s linear infinite !important;
       }
     }
   `;
@@ -1165,7 +1411,8 @@ class ToastifyPro {
         timeout: null,
         remainingTime: options.timeout,
         startTime: null,
-        isPaused: false
+        isPaused: false,
+        isRemoving: false // Flag to prevent hover interference during removal
       };
       this.activeToasts.push(toastData);
 
@@ -1182,6 +1429,8 @@ class ToastifyPro {
       // Pause on hover functionality
       if (options.pauseOnHover && options.timeout > 0) {
         toast.addEventListener('mouseenter', () => {
+          // Don't pause if toast is being removed
+          if (toastData.isRemoving) return;
           if (toastData.timeout) {
             clearTimeout(toastData.timeout);
             toastData.isPaused = true;
@@ -1191,17 +1440,19 @@ class ToastifyPro {
         });
         
         toast.addEventListener('mouseleave', () => {
+          // Don't restart timer if toast is being removed
+          if (toastData.isRemoving) return;
           if (toastData.isPaused && toastData.remainingTime > 0) {
             toastData.isPaused = false;
             toastData.startTime = Date.now();
             toast.classList.remove('paused');
             // Update CSS variable for remaining progress
             toast.style.setProperty('--duration', `${toastData.remainingTime}ms`);
-            // Restart the progress animation
-            const afterElement = toast.querySelector('::after');
-            toast.style.animation = 'none';
+            // Restart the progress bar animation only (not the main toast animation)
+            // Using class toggle to reset pseudo-element animation without affecting main element
+            toast.classList.add('progress-restart');
             void toast.offsetHeight; // Force reflow
-            toast.style.animation = '';
+            toast.classList.remove('progress-restart');
             
             toastData.timeout = setTimeout(() => this.removeToast(toast), toastData.remainingTime);
           }
@@ -1275,15 +1526,24 @@ class ToastifyPro {
     }
 
     try {
-      // Remove from active toasts tracking
+      // Remove from active toasts tracking and set removal flag
       const toastIndex = this.activeToasts.findIndex(t => t.element === toast);
       if (toastIndex > -1) {
         const toastData = this.activeToasts[toastIndex];
+        // Prevent hover events from interfering during removal
+        toastData.isRemoving = true;
         if (toastData.timeout) {
           clearTimeout(toastData.timeout);
         }
         this.activeToasts.splice(toastIndex, 1);
       }
+      
+      // Mark the toast element as removing to prevent double-removal
+      if (toast.dataset.removing === 'true') return;
+      toast.dataset.removing = 'true';
+      
+      // Disable pointer events during exit animation to prevent hover issues
+      toast.style.pointerEvents = 'none';
       
       // Detect position to choose the right swipe direction
       const container = toast.parentNode;
@@ -1305,12 +1565,12 @@ class ToastifyPro {
       }
       
       // Apply fast car swipe animation with improved easing
-      toast.style.animation = `${swipeAnimation} 0.4s cubic-bezier(0.4, 0.0, 1, 1) forwards`;
+      toast.style.animation = `${swipeAnimation} 0.35s cubic-bezier(0.55, 0.0, 0.85, 0.36) forwards`;
       
       // Add spinning icon animation for extra polish
       const icon = toast.querySelector('.toast-icon');
       if (icon) {
-        icon.style.animation = 'iconCarExit 0.4s cubic-bezier(0.4, 0.0, 1, 1) forwards';
+        icon.style.animation = 'iconCarExit 0.35s cubic-bezier(0.55, 0.0, 0.85, 0.36) forwards';
       }
       
       // Remove element after animation completes
@@ -1318,7 +1578,7 @@ class ToastifyPro {
         if (toast.parentNode) {
           toast.remove();
         }
-      }, 400);
+      }, 350);
     } catch (error) {
       console.error('ToastifyPro: Error removing toast:', error);
       // Fallback: remove immediately if animation fails
@@ -2173,6 +2433,527 @@ class ToastifyPro {
    */
   confirm(message, descriptionOrCallback, callback) {
     return this.conf(message, descriptionOrCallback, callback);
+  }
+
+  /**
+   * Shows an input prompt toast with a text field
+   * @param {string} message - Main prompt question
+   * @param {string|Function|Object} descriptionOrCallback - Description text, callback function, or options object
+   * @param {Function} callback - Callback function (if description provided)
+   * @returns {Object} Control object with element, close, setValue, getValue methods
+   * 
+   * Options object:
+   * - description: {string} Optional description text
+   * - placeholder: {string} Input placeholder text (default: 'Enter your response...')
+   * - submitText: {string} Submit button text (default: 'Submit')
+   * - cancelText: {string} Cancel button text (default: 'Cancel')
+   * - defaultValue: {string} Default input value
+   * - required: {boolean} Whether input is required (default: true)
+   * - type: {string} Input type: 'text', 'email', 'number', 'password', 'url' (default: 'text')
+   * - validate: {Function} Custom validation function (receives value, returns true or error string)
+   * - onSubmit: {Function} Called when user submits (receives value, control object)
+   * - onCancel: {Function} Called when user cancels
+   * - theme: {string} Toast theme: 'dark' or 'light' (default: 'dark')
+   * - position: {string} Override default position
+   * - overlay: {boolean} Show overlay behind toast (default: true)
+   * - primaryColor: {string} Custom primary color
+   * - secondaryColor: {string} Custom secondary color for gradient
+   * 
+   * @example
+   * // Simple usage
+   * toast.input('What is your name?', (value) => console.log(value));
+   * 
+   * // With description
+   * toast.input('Enter your email', 'We will send you updates', (value) => {...});
+   * 
+   * // Full options
+   * toast.input('Enter password', {
+   *   type: 'password',
+   *   placeholder: 'Minimum 8 characters',
+   *   validate: (val) => val.length >= 8 || 'Password must be at least 8 characters',
+   *   onSubmit: (value) => { ... },
+   *   theme: 'light'
+   * });
+   */
+  input(message, descriptionOrCallback, callback) {
+    try {
+      // Parse arguments like confirm method
+      let description = '';
+      let options = {};
+      let resultCallback = null;
+
+      if (typeof descriptionOrCallback === 'string') {
+        description = descriptionOrCallback;
+        if (typeof callback === 'function') {
+          resultCallback = callback;
+        } else if (typeof callback === 'object') {
+          options = callback || {};
+          resultCallback = options.onSubmit || null;
+        }
+      } else if (typeof descriptionOrCallback === 'function') {
+        resultCallback = descriptionOrCallback;
+      } else if (typeof descriptionOrCallback === 'object') {
+        options = descriptionOrCallback || {};
+        description = options.description || '';
+        resultCallback = options.onSubmit || null;
+      }
+
+      // Default options
+      const inputOptions = {
+        placeholder: options.placeholder || 'Enter your response...',
+        submitText: options.submitText || 'Submit',
+        cancelText: options.cancelText || 'Cancel',
+        defaultValue: options.defaultValue || '',
+        required: options.required !== false, // default true
+        type: options.type || 'text',
+        validate: options.validate || null,
+        onCancel: options.onCancel || null,
+        theme: options.theme || 'dark',
+        position: options.position || this.defaultOptions.position,
+        overlay: options.overlay !== false, // default true
+        primaryColor: options.primaryColor || null,
+        secondaryColor: options.secondaryColor || null,
+      };
+
+      // Validate input type
+      const validTypes = ['text', 'email', 'number', 'password', 'url', 'tel'];
+      if (!validTypes.includes(inputOptions.type)) {
+        inputOptions.type = 'text';
+      }
+
+      // Create or get container for the specified position
+      let inputContainer;
+      const positionClass = inputOptions.position.replace(' ', '-');
+      const existingContainer = document.querySelector(
+        `.toastify-pro-container.${positionClass}`
+      );
+      
+      if (existingContainer) {
+        inputContainer = existingContainer;
+      } else {
+        inputContainer = document.createElement("div");
+        inputContainer.className = `toastify-pro-container ${positionClass}`;
+        document.body.appendChild(inputContainer);
+      }
+
+      // Create overlay if enabled
+      let overlay = null;
+      if (inputOptions.overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "toastify-pro-overlay";
+        document.body.appendChild(overlay);
+        setTimeout(() => overlay.classList.add("visible"), 10);
+      }
+
+      // Create input toast element
+      const toast = document.createElement("div");
+      toast.className = `toastify-pro input-toast ${inputOptions.theme}`;
+      toast.setAttribute('role', 'dialog');
+      toast.setAttribute('aria-modal', 'true');
+      toast.setAttribute('aria-labelledby', 'toast-input-title');
+
+      // Track state
+      let isLoading = false;
+      let isClosed = false;
+      let inputElement = null;
+      let submitBtnElement = null;
+      let cancelBtnElement = null;
+      let errorElement = null;
+
+      // Helper: Check if a color is light or dark
+      const isLightColor = (color) => {
+        if (!color) return false;
+        const hex = color.replace('#', '');
+        if (hex.length === 3) {
+          const r = parseInt(hex[0] + hex[0], 16);
+          const g = parseInt(hex[1] + hex[1], 16);
+          const b = parseInt(hex[2] + hex[2], 16);
+          return (r * 299 + g * 587 + b * 114) / 1000 > 128;
+        }
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        return (r * 299 + g * 587 + b * 114) / 1000 > 128;
+      };
+
+      // Apply custom colors
+      let textColor = inputOptions.theme === 'light' ? '#1e293b' : 'white';
+      if (inputOptions.primaryColor) {
+        const primary = inputOptions.primaryColor;
+        const secondary = inputOptions.secondaryColor;
+        
+        if (secondary) {
+          toast.style.background = `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`;
+        } else {
+          toast.style.background = `linear-gradient(135deg, ${primary} 0%, ${primary}dd 100%)`;
+        }
+        
+        textColor = isLightColor(primary) ? '#1e293b' : 'white';
+        toast.style.color = textColor;
+        
+        const borderOpacity = isLightColor(primary) ? '0.2' : '0.15';
+        toast.style.borderColor = `rgba(255, 255, 255, ${borderOpacity})`;
+      }
+
+      // Set loading state
+      const setLoading = (loading) => {
+        isLoading = loading;
+        if (submitBtnElement) {
+          if (loading) {
+            submitBtnElement.classList.add('loading');
+          } else {
+            submitBtnElement.classList.remove('loading');
+          }
+        }
+        if (cancelBtnElement) {
+          cancelBtnElement.disabled = loading;
+          cancelBtnElement.style.opacity = loading ? '0.5' : '1';
+          cancelBtnElement.style.cursor = loading ? 'not-allowed' : 'pointer';
+        }
+        if (inputElement) {
+          inputElement.disabled = loading;
+          inputElement.style.opacity = loading ? '0.6' : '1';
+        }
+      };
+
+      // Close the input toast
+      const closeInput = () => {
+        if (isClosed) return;
+        isClosed = true;
+
+        // Remove overlay
+        if (overlay) {
+          overlay.classList.remove("visible");
+          setTimeout(() => overlay.remove(), 300);
+        }
+
+        // Exit animation
+        toast.style.pointerEvents = 'none';
+        toast.style.animation = 'carSwipeCenter 0.35s cubic-bezier(0.55, 0.0, 0.85, 0.36) forwards';
+        
+        const icon = toast.querySelector('.toast-icon');
+        if (icon) {
+          icon.style.animation = 'iconCarExit 0.35s cubic-bezier(0.55, 0.0, 0.85, 0.36) forwards';
+        }
+
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.remove();
+          }
+        }, 350);
+
+        // Restore focus
+        if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+          setTimeout(() => previouslyFocused.focus(), 100);
+        }
+
+        // Cleanup keyboard handler
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+
+      // Validate input
+      const validateInput = (value) => {
+        // Required check
+        if (inputOptions.required && !value.trim()) {
+          return 'This field is required';
+        }
+
+        // Type-specific validation
+        if (value.trim()) {
+          if (inputOptions.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+              return 'Please enter a valid email address';
+            }
+          } else if (inputOptions.type === 'url') {
+            try {
+              new URL(value);
+            } catch {
+              return 'Please enter a valid URL';
+            }
+          } else if (inputOptions.type === 'number') {
+            if (isNaN(Number(value))) {
+              return 'Please enter a valid number';
+            }
+          }
+        }
+
+        // Custom validation
+        if (inputOptions.validate) {
+          const customResult = inputOptions.validate(value);
+          if (customResult !== true && customResult) {
+            return customResult;
+          }
+        }
+
+        return null; // Valid
+      };
+
+      // Show error message
+      const showError = (message) => {
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.classList.add('visible');
+          inputElement.classList.add('error');
+        }
+      };
+
+      // Clear error message
+      const clearError = () => {
+        if (errorElement) {
+          errorElement.classList.remove('visible');
+          inputElement.classList.remove('error');
+        }
+      };
+
+      // Handle submit
+      const handleSubmit = async () => {
+        if (isLoading || isClosed) return;
+
+        const value = inputElement.value;
+        const error = validateInput(value);
+
+        if (error) {
+          showError(error);
+          inputElement.focus();
+          return;
+        }
+
+        clearError();
+
+        if (resultCallback) {
+          const result = resultCallback(value, { setLoading, close: closeInput, setValue: (v) => inputElement.value = v });
+          
+          // Handle async callbacks
+          if (result && typeof result.then === 'function') {
+            setLoading(true);
+            try {
+              await result;
+              if (!isClosed) {
+                closeInput();
+              }
+            } catch (err) {
+              setLoading(false);
+              if (err && typeof err === 'string') {
+                showError(err);
+              } else if (err && err.message) {
+                showError(err.message);
+              }
+            }
+          } else if (!isLoading) {
+            closeInput();
+          }
+        } else {
+          closeInput();
+        }
+      };
+
+      // Handle cancel
+      const handleCancel = () => {
+        if (isLoading || isClosed) return;
+        
+        if (inputOptions.onCancel) {
+          inputOptions.onCancel();
+        }
+        closeInput();
+      };
+
+      // Store previously focused element
+      const previouslyFocused = document.activeElement;
+
+      // Keyboard handler
+      const handleKeyDown = (e) => {
+        if (isClosed) return;
+        
+        if (e.key === 'Escape' && !isLoading) {
+          handleCancel();
+        } else if (e.key === 'Enter' && e.target === inputElement && !isLoading) {
+          e.preventDefault();
+          handleSubmit();
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+
+      // Build toast content
+      // Header with icon and content
+      const headerWrapper = document.createElement("div");
+      headerWrapper.className = "toast-input-header";
+
+      // Icon
+      const iconWrapper = document.createElement("div");
+      iconWrapper.className = "toast-icon";
+      iconWrapper.setAttribute('aria-hidden', 'true');
+      iconWrapper.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.43739 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+      if (inputOptions.primaryColor) {
+        iconWrapper.style.color = textColor;
+      }
+      headerWrapper.appendChild(iconWrapper);
+
+      // Content wrapper
+      const contentWrapper = document.createElement("div");
+      contentWrapper.className = "toast-content";
+
+      // Message
+      const messageElement = document.createElement("div");
+      messageElement.className = "toast-message";
+      messageElement.id = "toast-input-title";
+      messageElement.textContent = message.substring(0, this.defaultOptions.maxLength);
+      if (inputOptions.primaryColor) {
+        messageElement.style.color = textColor;
+      }
+      contentWrapper.appendChild(messageElement);
+
+      // Description
+      if (description) {
+        const descriptionElement = document.createElement("div");
+        descriptionElement.className = "toast-description";
+        descriptionElement.id = "toast-input-desc";
+        descriptionElement.textContent = description.substring(0, this.defaultOptions.maxLength * 2);
+        if (inputOptions.primaryColor) {
+          descriptionElement.style.color = textColor;
+        }
+        contentWrapper.appendChild(descriptionElement);
+        toast.setAttribute('aria-describedby', 'toast-input-desc');
+      }
+
+      headerWrapper.appendChild(contentWrapper);
+
+      // Input wrapper
+      const inputWrapper = document.createElement("div");
+      inputWrapper.className = "toast-input-wrapper";
+      inputWrapper.appendChild(headerWrapper);
+
+      // Input field
+      inputElement = document.createElement("input");
+      inputElement.className = "toast-input";
+      inputElement.type = inputOptions.type;
+      inputElement.placeholder = inputOptions.placeholder;
+      inputElement.value = inputOptions.defaultValue;
+      inputElement.setAttribute('aria-label', message);
+      
+      if (inputOptions.primaryColor) {
+        const isLight = isLightColor(inputOptions.primaryColor);
+        inputElement.style.borderColor = isLight ? 'rgba(15, 23, 42, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+        inputElement.style.background = isLight ? 'rgba(15, 23, 42, 0.06)' : 'rgba(255, 255, 255, 0.08)';
+        inputElement.style.color = textColor;
+      }
+      
+      // Clear error on input
+      inputElement.addEventListener('input', () => {
+        if (errorElement && errorElement.classList.contains('visible')) {
+          clearError();
+        }
+      });
+      
+      inputWrapper.appendChild(inputElement);
+
+      // Error message element
+      errorElement = document.createElement("div");
+      errorElement.className = "toast-input-error";
+      errorElement.setAttribute('role', 'alert');
+      inputWrapper.appendChild(errorElement);
+
+      // Actions wrapper
+      const actionsWrapper = document.createElement("div");
+      actionsWrapper.className = "toast-input-actions";
+
+      // Cancel button
+      cancelBtnElement = document.createElement("button");
+      cancelBtnElement.className = "input-btn input-btn-cancel";
+      cancelBtnElement.type = "button";
+      cancelBtnElement.textContent = inputOptions.cancelText;
+      cancelBtnElement.onclick = handleCancel;
+      
+      if (inputOptions.primaryColor) {
+        const isLight = isLightColor(inputOptions.primaryColor);
+        cancelBtnElement.style.background = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.1)';
+        cancelBtnElement.style.color = textColor;
+        cancelBtnElement.style.borderColor = isLight ? 'rgba(15, 23, 42, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+      }
+
+      // Submit button
+      submitBtnElement = document.createElement("button");
+      submitBtnElement.className = "input-btn input-btn-submit";
+      submitBtnElement.type = "button";
+      
+      const textWrapper = document.createElement("span");
+      textWrapper.className = "btn-text";
+      textWrapper.textContent = inputOptions.submitText;
+      submitBtnElement.appendChild(textWrapper);
+
+      // Spinner
+      const spinner = document.createElement("span");
+      spinner.className = "btn-spinner";
+      spinner.innerHTML = `<svg width="16" height="16" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.5 2.9375V5.5625M9.5 13.4375V16.0625M2.9375 9.5H5.5625M13.4375 9.5H16.0625" stroke="currentColor" stroke-width="1.875" stroke-linecap="round" />
+        <path d="M4.86011 4.85961L6.71627 6.71577M12.2847 12.2842L14.1409 14.1404M4.86011 14.1404L6.71627 12.2842M12.2847 6.71577L14.1409 4.85961" stroke="currentColor" stroke-width="1.875" stroke-linecap="round" />
+      </svg>`;
+      submitBtnElement.appendChild(spinner);
+      
+      submitBtnElement.onclick = handleSubmit;
+      
+      if (inputOptions.primaryColor) {
+        const primary = inputOptions.primaryColor;
+        const isLight = isLightColor(primary);
+        submitBtnElement.style.background = isLight 
+          ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' 
+          : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%)';
+        submitBtnElement.style.color = isLight ? 'white' : '#1e293b';
+        submitBtnElement.style.borderColor = isLight ? 'rgba(15, 23, 42, 0.3)' : 'rgba(255, 255, 255, 0.4)';
+      }
+
+      actionsWrapper.appendChild(cancelBtnElement);
+      actionsWrapper.appendChild(submitBtnElement);
+      inputWrapper.appendChild(actionsWrapper);
+
+      toast.appendChild(inputWrapper);
+      inputContainer.appendChild(toast);
+
+      // Entrance animation
+      setTimeout(() => {
+        toast.classList.add("show");
+        const icon = toast.querySelector('.toast-icon');
+        if (icon) {
+          icon.style.animation = 'iconBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }
+        
+        // Focus input after animation
+        setTimeout(() => {
+          inputElement.focus();
+          // Select default value if present
+          if (inputOptions.defaultValue) {
+            inputElement.select();
+          }
+        }, 150);
+      }, 10);
+
+      // Return control object
+      return {
+        element: toast,
+        close: closeInput,
+        setLoading,
+        getValue: () => inputElement.value,
+        setValue: (value) => { inputElement.value = value; },
+        setError: showError,
+        clearError
+      };
+    } catch (error) {
+      console.error('ToastifyPro: Failed to create input toast:', error);
+    }
+  }
+
+  /**
+   * Alias for input() method - shows an input prompt
+   * @param {string} message - Main prompt question  
+   * @param {string|Function|Object} descriptionOrCallback - Description text, callback function, or options object
+   * @param {Function} callback - Callback function (if description provided)
+   */
+  prompt(message, descriptionOrCallback, callback) {
+    return this.input(message, descriptionOrCallback, callback);
   }
 }
 

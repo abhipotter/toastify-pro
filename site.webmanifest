@@ -23,31 +23,31 @@
   "keywords": "toast notifications, javascript toast, react toast, toastify, toastr, sweetalert alternative, notification library, javascript notifications, web notifications, toast message, alert notifications, popup notifications, success toast, error toast, warning toast, info toast, react toastify, vue notifications, angular notifications, javascript alert, custom toast, notification popup, toast component, notification component, lightweight toast, responsive notifications, mobile toast, toast library, notification system, user feedback, ui notifications, frontend notifications, web toast, browser notifications, toast plugin",
   "icons": [
     {
-      "src": "/favicon-16x16.png",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "16x16",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/favicon-32x32.png",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "32x32",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/apple-touch-icon.png",
+      "src": "https://abhipotter.github.io/toastify-pro/assets/icons/favicon.ico",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
